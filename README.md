@@ -11,7 +11,7 @@ be completely hidden from the Internet behind a password or IP range.
 - Python 3.4, 3.5, 3.6
 
 ## Installation
-The package is on [PyPi](https://pypi.org/project/django-basic-auth-ip-whitelist/).
+The package is on [PyPI](https://pypi.org/project/django-basic-auth-ip-whitelist/).
 ```bash
 pip install django-basic-auth-ip-whitelist
 ```
