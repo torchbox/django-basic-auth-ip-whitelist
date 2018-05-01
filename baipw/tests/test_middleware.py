@@ -93,6 +93,30 @@ class TestMiddleware(TestCase):
         self.assertEqual(self.middleware.basic_auth_password, 'somepassword')
 
     @override_settings(
+        BASIC_AUTH_LOGIN='somelogin',
+        BASIC_AUTH_PASSWORD='somepassword',
+        BASIC_AUTH_WHITELISTED_IP_NETWORKS=[
+            '45.21.123.0/24',
+        ]
+    )
+    def test_basic_auth_not_used_if_on_whitelisted_network(self):
+        self.request.META['REMOTE_ADDR'] = '45.21.123.45'
+        self.assertTrue(self.middleware._is_basic_auth_configured())
+        with mock.patch(
+            'baipw.middleware.BasicAuthIPWhitelistMiddleware.'
+            '_basic_auth_response'
+        ) as m:
+            with mock.patch(
+                'baipw.middleware.BasicAuthIPWhitelistMiddleware.'
+                '_is_ip_whitelisted'
+            ) as ip_check_m:
+                self.middleware(self.request)
+        # Make sure middleware did not try to evaluate basic auth.
+        m.assert_not_called()
+        # But it called the IP check.
+        ip_check_m.assert_called_once_with(self.request)
+
+    @override_settings(
         BASIC_AUTH_GET_CLIENT_IP_FUNCTION=(
             'baipw.tests.utils.custom_get_client_ip'
         ),
