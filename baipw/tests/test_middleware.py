@@ -1,3 +1,4 @@
+from unittest import mock
 from unittest.mock import MagicMock
 
 from django.core.exceptions import PermissionDenied
@@ -90,3 +91,15 @@ class TestMiddleware(TestCase):
     def test_basic_auth_credentials_settings(self):
         self.assertEqual(self.middleware.basic_auth_login, 'randomlogin')
         self.assertEqual(self.middleware.basic_auth_password, 'somepassword')
+
+    @override_settings(
+        BASIC_AUTH_GET_CLIENT_IP_FUNCTION=(
+            'baipw.tests.utils.custom_get_client_ip'
+        ),
+    )
+    def test_get_custom_get_client_ip(self):
+        with mock.patch('baipw.tests.utils.custom_get_client_ip') as m:
+            with mock.patch('baipw.utils.get_client_ip') as default_m:
+                self.middleware._get_client_ip(self.request)
+        m.self_assert_called_once_with(self.request)
+        default_m.assert_not_called()
