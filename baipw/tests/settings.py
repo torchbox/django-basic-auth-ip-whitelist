@@ -1,13 +1,6 @@
-import random
-import string
+from django.utils.crypto import get_random_string
 
-
-def generate_secret_key():
-    characters = string.digits + string.ascii_letters + string.punctuation
-    return ''.join([random.choice(characters) for i in range(50)])
-
-
-SECRET_KEY = generate_secret_key()
+SECRET_KEY = get_random_string(50)
 
 DATABASES = {
     'default': {
