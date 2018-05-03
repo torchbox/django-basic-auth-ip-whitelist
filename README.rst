@@ -1,7 +1,7 @@
 django-basic-auth-ip-whitelist
 ==============================
 
-This simple package ships middleware that let you to set basic auth and
+This simple package ships middleware that lets you to set basic auth and
 IP whitelisting via settings.
 
 Use case
