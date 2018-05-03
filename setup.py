@@ -34,6 +34,6 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Framework :: Django',
         'Framework :: Django :: 1.11',
-        'Framework :: Django :: 2',
+        'Framework :: Django :: 2.0',
     ]
 )
