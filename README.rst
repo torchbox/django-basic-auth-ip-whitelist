@@ -46,6 +46,11 @@ that you want to be able to access the website without authentication
 from. It must be either a string with networks separated by comma or
 Python iterable.
 
+``BASIC_AUTH_REALM``
+~~~~~~~~~~~~~~~~~~~~
+
+String specifying the realm of the default response.
+
 Example settings
 ~~~~~~~~~~~~~~~~
 
@@ -60,6 +65,7 @@ Example settings
         '192.168.0.0/28',
         '2001:db00::0/24',
     ]
+    BASIC_AUTH_REALM = "Access to the staging site restricted"
 
 Advanced customisation
 ----------------------
