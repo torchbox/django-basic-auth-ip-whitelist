@@ -14,6 +14,9 @@ class BasicAuthIPWhitelistMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        # Check if http host is whitelisted.
+        if self._is_http_host_whitelisted(request):
+            return self.get_response(request)
         # Check if IP is whitelisted
         if self._is_ip_whitelisted(request):
             return self.get_response(request)
@@ -59,6 +62,25 @@ class BasicAuthIPWhitelistMiddleware:
             if not network:
                 continue
             yield ipaddress.ip_network(network)
+
+    def _get_whitelisted_http_hosts(self):
+        http_hosts = getattr(settings, 'BASIC_AUTH_WHITELISTED_HTTP_HOSTS', [])
+        # If we get a list, users probably passed a list of strings in
+        #  the settings, probably from the environment.
+        if isinstance(http_hosts, str):
+            http_hosts = http_hosts.split(',')
+        # Otherwise assume that the list is iterable.
+        for http_host in http_hosts:
+            http_host = http_host.strip()
+            if not http_host:
+                continue
+            yield http_host
+
+    def _is_http_host_whitelisted(self, request):
+        request_host = request.META.get('HTTP_HOST')
+        if not request_host:
+            return False
+        return request_host in self._get_whitelisted_http_hosts()
 
     def _is_ip_whitelisted(self, request):
         """
