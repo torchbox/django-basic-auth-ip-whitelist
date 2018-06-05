@@ -75,3 +75,20 @@ in the ``BASIC_AUTH_GET_CLIENT_IP_FUNCTION`` settings, e.g.
 
     BASIC_AUTH_GET_CLIENT_IP_FUNCTION = 'utils.ip.get_client_ip'
 
+
+``BASIC_AUTH_WHITELISTED_HTTP_HOSTS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set a list of hosts that your website will be open to without basic
+authentication. This is useful if your website is hosted under multiple domains
+and you want only one of them to be publicly visible, e.g. by search engines.
+
+**This is by no means a security feature. Please do not use to secure your
+site.**
+
+.. code:: python
+
+    BASIC_AUTH_WHITELISTED_HTTP_HOSTS = [
+        'your-public-domain.com',
+    ]
+
