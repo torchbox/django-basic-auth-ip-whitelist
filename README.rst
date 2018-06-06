@@ -23,9 +23,9 @@ Installation
 The package is on
 `PyPI <https://pypi.org/project/django-basic-auth-ip-whitelist/>`__.
 
-.. code:: bash
+.. code:: sh
 
-    pip install django-basic-auth-ip-whitelist
+   pip install django-basic-auth-ip-whitelist
 
 Configuration
 -------------
@@ -56,16 +56,15 @@ Example settings
 
 .. code:: python
 
-    MIDDLEWARE += [
-        'baipw.middleware.BasicAuthIPWhitelistMiddleware'
-    ]
-    BASIC_AUTH_LOGIN = 'somelogin'
-    BASIC_AUTH_PASSWORD = 'greatpassword'
-    BASIC_AUTH_WHITELISTED_IP_NETWORKS = [
-        '192.168.0.0/28',
-        '2001:db00::0/24',
-    ]
-    BASIC_AUTH_REALM = "Access to the staging site restricted"
+   MIDDLEWARE += [
+       'baipw.middleware.BasicAuthIPWhitelistMiddleware'
+   ]
+   BASIC_AUTH_LOGIN = 'somelogin'
+   BASIC_AUTH_PASSWORD = 'greatpassword'
+   BASIC_AUTH_WHITELISTED_IP_NETWORKS = [
+       '192.168.0.0/28',
+       '2001:db00::0/24',
+   ]
 
 Advanced customisation
 ----------------------
@@ -79,7 +78,7 @@ in the ``BASIC_AUTH_GET_CLIENT_IP_FUNCTION`` settings, e.g.
 
 .. code:: python
 
-    BASIC_AUTH_GET_CLIENT_IP_FUNCTION = 'utils.ip.get_client_ip'
+   BASIC_AUTH_GET_CLIENT_IP_FUNCTION = 'utils.ip.get_client_ip'
 
 
 ``BASIC_AUTH_WHITELISTED_HTTP_HOSTS``
@@ -94,7 +93,17 @@ site.**
 
 .. code:: python
 
-    BASIC_AUTH_WHITELISTED_HTTP_HOSTS = [
-        'your-public-domain.com',
-    ]
+   BASIC_AUTH_WHITELISTED_HTTP_HOSTS = [
+       'your-public-domain.com',
+   ]
+
+``BASIC_AUTH_RESPONSE_TEMPLATE``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to display a different template on the 401 page, please use this
+setting to point at the template.
+
+.. code:: python
+
+   BASIC_AUTH_RESPONSE_TEMPLATE = '401.html'
 
