@@ -38,7 +38,7 @@ class BasicAuthIPWhitelistMiddleware:
         try:
             authorize(request, self.basic_auth_login, self.basic_auth_password)
         except Unauthorized:
-            return HttpUnauthorizedResponse()
+            return HttpUnauthorizedResponse(request=request)
         return self.get_response(request)
 
     def _get_client_ip(self, request):
