@@ -5,6 +5,8 @@ from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, TestCase, override_settings
 
 from baipw.middleware import BasicAuthIPWhitelistMiddleware
+from baipw.response import HttpUnauthorizedResponse
+from baipw.tests.response import TestResponse
 
 
 class TestMiddleware(TestCase):
@@ -197,3 +199,24 @@ class TestMiddleware(TestCase):
         self.request.META['HTTP_HOST'] = 'dgg.gg'
         # It does not raise.
         self.middleware(self.request)
+
+    def test_get_response_class_when_none_set(self):
+        self.assertIs(self.middleware.get_response_class(),
+                      HttpUnauthorizedResponse)
+
+    @override_settings(
+        BASIC_AUTH_RESPONSE_CLASS='baipw.tests.response.TestResponse'
+    )
+    def test_get_response_class_when_set(self):
+        self.assertIs(self.middleware.get_response_class(),
+                      TestResponse)
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='testlogin',
+        BASIC_AUTH_PASSWORD='testpassword',
+        BASIC_AUTH_RESPONSE_CLASS='baipw.tests.response.TestResponse'
+    )
+    def test_middleware_when_custom_response_set(self):
+        response = self.middleware(self.request)
+        self.assertIs(response.__class__, TestResponse)
+        self.assertEqual(response.content, b'Test message. :P')
