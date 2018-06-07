@@ -1,5 +1,5 @@
-In Development
-~~~~~~~~~~~~~~
+0.2 - 7th June 2018
+~~~~~~~~~~~~~~~~~~~
 
 * Add HTTP host header whitelist (``BASIC_AUTH_RESPONSE_TEMPLATE``) (`!2 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/2>`_)
 * Add the ``BASIC_AUTH_REALM`` setting (`!3 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/3>`_)
