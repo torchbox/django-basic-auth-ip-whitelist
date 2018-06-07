@@ -118,4 +118,17 @@ Provide the path as a string.
 
    BASIC_AUTH_RESPONSE_CLASS = 'yourmodule.response.CustomUnathorisedResponse'
 
+Skip middleware
+~~~~~~~~~~~~~~~
 
+You can skip the middleware by setting
+`_skip_basic_auth_ip_whitelist_middleware_check` attribute on the request to
+`True`.
+
+.. code:: python
+
+   setattr(request, '_skip_basic_auth_ip_whitelist_middleware_check', True)
+
+
+This may be handy if you have other middleware that you want to have
+co-existing different middleware that restrict access to the website.
