@@ -220,3 +220,30 @@ class TestMiddleware(TestCase):
         response = self.middleware(self.request)
         self.assertIs(response.__class__, TestResponse)
         self.assertEqual(response.content, b'Test message. :P')
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='test',
+        BASIC_AUTH_PASSWORD='test',
+    )
+    def test_skip_basic_auth_ip_whitelist_middleware_check_attribute_set(self):
+        self.assertFalse(
+            hasattr(self.request,
+                    '_skip_basic_auth_ip_whitelist_middleware_check')
+        )
+        self.middleware(self.request)
+        self.assertTrue(
+            self.request._skip_basic_auth_ip_whitelist_middleware_check
+        )
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='test',
+        BASIC_AUTH_PASSWORD='test',
+    )
+    def test_the_attribute_skips(self):
+        setattr(
+            self.request,
+            '_skip_basic_auth_ip_whitelist_middleware_check',
+            True
+        )
+        self.middleware(self.request)
+        self.get_response_mock.assert_called_once_with(self.request)

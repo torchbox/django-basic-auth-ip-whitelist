@@ -14,6 +14,13 @@ class BasicAuthIPWhitelistMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        # If this attribute is set, skip the check.
+        if getattr(request, '_skip_basic_auth_ip_whitelist_middleware_check',
+                   False):
+            return self.get_response(request)
+
+        setattr(request, '_skip_basic_auth_ip_whitelist_middleware_check',
+                True)
         # Check if http host is whitelisted.
         if self._is_http_host_whitelisted(request):
             return self.get_response(request)
