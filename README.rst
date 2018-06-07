@@ -107,3 +107,15 @@ setting to point at the template.
 
    BASIC_AUTH_RESPONSE_TEMPLATE = '401.html'
 
+
+``BASIC_AUTH_RESPONSE_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to specify custom response class, you can do so with this setting.
+Provide the path as a string.
+
+.. code:: python
+
+   BASIC_AUTH_RESPONSE_CLASS = 'yourmodule.response.CustomUnathorisedResponse'
+
+

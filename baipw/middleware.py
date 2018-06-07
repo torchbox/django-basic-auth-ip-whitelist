@@ -34,11 +34,17 @@ class BasicAuthIPWhitelistMiddleware:
     def basic_auth_password(self):
         return getattr(settings, 'BASIC_AUTH_PASSWORD', None)
 
+    def get_response_class(self):
+        try:
+            return import_string(settings.BASIC_AUTH_RESPONSE_CLASS)
+        except AttributeError:
+            return HttpUnauthorizedResponse
+
     def _basic_auth_response(self, request):
         try:
             authorize(request, self.basic_auth_login, self.basic_auth_password)
         except Unauthorized:
-            return HttpUnauthorizedResponse(request=request)
+            return self.get_response_class()(request=request)
         return self.get_response(request)
 
     def _get_client_ip(self, request):
