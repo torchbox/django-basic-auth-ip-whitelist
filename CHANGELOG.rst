@@ -1,3 +1,8 @@
+In development
+~~~~~~~~~~~~~~
+
+* Use HttpRequest.get_host instead of HTTP_HOST
+
 0.2 - 7th June 2018
 ~~~~~~~~~~~~~~~~~~~
 

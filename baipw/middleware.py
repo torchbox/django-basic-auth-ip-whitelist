@@ -90,7 +90,7 @@ class BasicAuthIPWhitelistMiddleware:
             yield http_host
 
     def _is_http_host_whitelisted(self, request):
-        request_host = request.META.get('HTTP_HOST')
+        request_host = request.get_host()
         if not request_host:
             return False
         return request_host in self._get_whitelisted_http_hosts()
