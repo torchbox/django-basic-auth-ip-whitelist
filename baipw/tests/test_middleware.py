@@ -157,6 +157,7 @@ class TestMiddleware(TestCase):
         )
 
     @override_settings(
+        ALLOWED_HOSTS=['kernel.org'],
         BASIC_AUTH_WHITELISTED_HTTP_HOSTS=['kernel.org', 'dgg.gg']
     )
     def test_http_host_whitelist_passes_check_when_configured_(self):
@@ -166,6 +167,7 @@ class TestMiddleware(TestCase):
         )
 
     @override_settings(
+        ALLOWED_HOSTS=['google.com'],
         BASIC_AUTH_WHITELISTED_HTTP_HOSTS=['kernel.org', 'dgg.gg']
     )
     def test_http_host_whitelist_fails_check_when_configured_(self):
@@ -182,6 +184,7 @@ class TestMiddleware(TestCase):
             self.middleware(self.request)
 
     @override_settings(
+        ALLOWED_HOSTS=['www.example.com'],
         BASIC_AUTH_WHITELISTED_HTTP_HOSTS=['kernel.org', 'dgg.gg']
     )
     def test_http_host_whitelist_fails_check_with_wrong_host(self):
@@ -193,7 +196,8 @@ class TestMiddleware(TestCase):
         BASIC_AUTH_LOGIN='somelogin',
         BASIC_AUTH_PASSWORD='somepassword',
         BASIC_AUTH_WHITELISTED_IP_NETWORKS=['45.21.123.0/24'],
-        BASIC_AUTH_WHITELISTED_HTTP_HOSTS=['kernel.org', 'dgg.gg']
+        BASIC_AUTH_WHITELISTED_HTTP_HOSTS=['kernel.org', 'dgg.gg'],
+        ALLOWED_HOSTS=['dgg.gg'],
     )
     def test_http_host_whitelist_has_precedence_over_basic_auth(self):
         self.request.META['HTTP_HOST'] = 'dgg.gg'
