@@ -14,8 +14,8 @@ range.
 Requirements
 ------------
 
--  Django 1.11 or 2.0
--  Python 3.4, 3.5, 3.6
+-  Django 1.11 and 2
+-  Python 3.4, 3.5, 3.6, 3.7
 
 Installation
 ------------
