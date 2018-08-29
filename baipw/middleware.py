@@ -10,10 +10,16 @@ from .utils import authorize, get_client_ip
 
 
 class BasicAuthIPWhitelistMiddleware:
-    def __init__(self, get_response):
+    def __init__(self, get_response=None):
         self.get_response = get_response
 
     def __call__(self, request):
+        response = None
+        response = self.process_request(request)
+        response = response or self.get_response(request)
+        return response
+
+    def process_request(self, request):
         # If this attribute is set, skip the check.
         if getattr(request, '_skip_basic_auth_ip_whitelist_middleware_check',
                    False):
@@ -23,10 +29,10 @@ class BasicAuthIPWhitelistMiddleware:
                 True)
         # Check if http host is whitelisted.
         if self._is_http_host_whitelisted(request):
-            return self.get_response(request)
+            return
         # Check if IP is whitelisted
         if self._is_ip_whitelisted(request):
-            return self.get_response(request)
+            return
         # Fallback to basic auth if configured.
         if self._is_basic_auth_configured():
             return self._basic_auth_response(request)
@@ -52,7 +58,6 @@ class BasicAuthIPWhitelistMiddleware:
             authorize(request, self.basic_auth_login, self.basic_auth_password)
         except Unauthorized:
             return self.get_response_class()(request=request)
-        return self.get_response(request)
 
     def _get_client_ip(self, request):
         function_path = getattr(
