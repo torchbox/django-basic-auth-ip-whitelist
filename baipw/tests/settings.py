@@ -1,5 +1,6 @@
 from os.path import abspath, dirname, join
 
+import django
 from django.utils.crypto import get_random_string
 
 TESTS_PATH = dirname(abspath(__file__))
@@ -21,3 +22,7 @@ TEMPLATES = [
         ],
     },
 ]
+
+if django.VERSION < (1, 9):
+    # This is to satisfy the django-admin check command.
+    MIDDLEWARE_CLASSES = []
