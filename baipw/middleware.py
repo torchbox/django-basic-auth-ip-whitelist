@@ -30,6 +30,9 @@ class BasicAuthIPWhitelistMiddleware:
         # Check if http host is whitelisted.
         if self._is_http_host_whitelisted(request):
             return
+        # Check if path is whitelisted
+        if self._is_path_whitelisted(request):
+            return
         # Check if IP is whitelisted
         if self._is_ip_whitelisted(request):
             return
@@ -94,11 +97,33 @@ class BasicAuthIPWhitelistMiddleware:
                 continue
             yield http_host
 
+    def _get_whitelisted_paths(self):
+        paths = getattr(settings, 'BASIC_AUTH_WHITELISTED_PATHS', [])
+        # If we get a list, users probably passed a list of strings in
+        #  the settings, probably from the environment.
+        if isinstance(paths, str):
+            paths = paths.split(',')
+        # Otherwise assume that the list is iterable.
+        for path in paths:
+            path = path.strip()
+            if not path:
+                continue
+            yield path
+
     def _is_http_host_whitelisted(self, request):
         request_host = request.get_host()
         if not request_host:
             return False
         return request_host in self._get_whitelisted_http_hosts()
+
+    def _is_path_whitelisted(self, request):
+        """
+        Check if request.path is whitelisted. Subpaths are included.
+        """
+        for path in self._get_whitelisted_paths():
+            if request.path.startswith(path):
+                return True
+        return False
 
     def _is_ip_whitelisted(self, request):
         """
