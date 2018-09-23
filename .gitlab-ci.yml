@@ -4,7 +4,54 @@ before_script:
   - pip install tox
 
 stages:
+  - lint
   - test
+
+flake8:
+  stage: lint
+  script:
+    - tox -e flake8
+
+isort:
+  stage: lint
+  script:
+    - tox -e isort
+
+py34-dj18:
+  image: python:3.4
+  stage: test
+  script:
+    - tox -e py34-dj18
+
+py35-dj18:
+  image: python:3.5
+  stage: test
+  script:
+    - tox -e py35-dj18
+
+py34-dj19:
+  image: python:3.4
+  stage: test
+  script:
+    - tox -e py34-dj19
+
+py35-dj19:
+  image: python:3.5
+  stage: test
+  script:
+    - tox -e py35-dj19
+
+py34-dj110:
+  image: python:3.4
+  stage: test
+  script:
+    - tox -e py34-dj110
+
+py35-dj110:
+  image: python:3.5
+  stage: test
+  script:
+    - tox -e py35-dj110
 
 py34-dj111:
   image: python:3.4
@@ -58,20 +105,10 @@ py36-dj21:
   image: python:3.6
   stage: test
   script:
-    - tox -e py35-dj21
+    - tox -e py36-dj21
 
 py37-dj21:
   image: python:3.7
   stage: test
   script:
     - tox -e py37-dj21
-
-flake8:
-  stage: test
-  script:
-    - tox -e flake8
-
-isort:
-  stage: test
-  script:
-    - tox -e isort
