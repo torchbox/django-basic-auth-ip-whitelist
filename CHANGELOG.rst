@@ -1,5 +1,5 @@
-In development
-~~~~~~~~~~~~~~
+0.3a0 - 23rd September 2018
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Don't crash on wrong authorization header format (`!8 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/8/>`_)
 * Add support for old-fashioned MIDDLEWARE_CLASSES (`!7 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/7/>`_)
