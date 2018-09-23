@@ -22,9 +22,13 @@ def authorize(request, configured_username, configured_password):
             '"HTTP_AUTHORIZATION" is not present in the request object.'
         )
     authentication = request.META['HTTP_AUTHORIZATION']
-    auth_method, auth = authentication.split(' ', 1)
+    authentication_tuple = authentication.split(' ', 1)
+    if len(authentication_tuple) != 2:
+        raise Unauthorized('Invalid format of the authorization header.')
+    auth_method = authentication_tuple[0]
+    auth = authentication_tuple[1]
     if 'basic' != auth_method.lower():
-        raise Unauthorized('"Basic" is not an authorization method')
+        raise Unauthorized('"Basic" is not an authorization method.')
     auth = base64.b64decode(auth.strip()).decode('utf-8')
     username, password = auth.split(':', 1)
     if username == configured_username and password == configured_password:

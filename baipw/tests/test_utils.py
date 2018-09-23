@@ -41,6 +41,15 @@ class TestAuthorize(TestCase):
             authorize(self.request, 'somelogin', 'correctpassword')
         )
 
+    def test_authorise_with_invalid_header(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic'
+        with self.assertRaises(Unauthorized) as e:
+            authorize(self.request, 'somelogin', 'wrongpassword')
+        self.assertEqual(
+            str(e.exception),
+            'Invalid format of the authorization header.'
+        )
+
 
 class TestGetClientIP(TestCase):
     def setUp(self):
