@@ -1,3 +1,8 @@
+In development
+~~~~~~~~~~~~~~
+
+* Include HTML and textual files in the package.
+
 0.3a0 - 23rd September 2018
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
