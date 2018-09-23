@@ -1,27 +1,28 @@
 django-basic-auth-ip-whitelist
 ==============================
 
-This simple package ships middleware that lets you to set basic auth and
-IP whitelisting via settings.
+This simple package ships middleware that lets you to set basic authentication
+and IP whitelisting via Django settings.
 
 Use case
 --------
 
-This package has been created in mind for staging and demo sites that
-need to be completely hidden from the Internet behind a password or IP
-range.
+This package has been created for staging and demo sites that need to be
+completely hidden from the Internet behind a password or accessible only to
+certain IP networks.
 
 Requirements
 ------------
 
 -  Django 1.8, 1.9, 1.10, 1.11 and 2
--  Python 3.4, 3.5, 3.6, 3.7
+-  Python 3.4, 3.5, 3.6 and 3.7
 
 Installation
 ------------
 
 The package is on
-`PyPI <https://pypi.org/project/django-basic-auth-ip-whitelist/>`__.
+`PyPI <https://pypi.org/project/django-basic-auth-ip-whitelist/>`__ so you can
+just install if with pip.
 
 .. code:: sh
 
@@ -30,7 +31,7 @@ The package is on
 Configuration
 -------------
 
-In your Django settings you can configure the following settings.
+In your Django settings you can configure the following settings:
 
 ``BASIC_AUTH_LOGIN`` and ``BASIC_AUTH_PASSWORD``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
