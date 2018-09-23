@@ -1,3 +1,8 @@
+In development
+~~~~~~~~~~~~~~
+
+* Don't crash on wrong authorization header format (`!8 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/8/>`_)
+
 0.2.1 - 20th July 2018
 ~~~~~~~~~~~~~~~~~~~~~~
 
