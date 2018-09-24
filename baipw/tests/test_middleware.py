@@ -204,6 +204,93 @@ class TestMiddleware(TestCase):
         # It does not raise.
         self.middleware(self.request)
 
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/']
+    )
+    def test_whitelisted_path_setting_when_setting_set(self):
+        self.assertEqual(
+            list(self.middleware._get_whitelisted_paths()),
+            ['ham/'],
+        )
+
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/', 'eggs/']
+    )
+    def test_whitelisted_path_setting_when_setting_set_multiple(self):
+        self.assertEqual(
+            set(self.middleware._get_whitelisted_paths()),
+            {'ham/', 'eggs/'},
+        )
+
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS='ham/,eggs/'
+    )
+    def test_whitelisted_path_setting_when_setting_set_multiple_comma_delimited(self):
+        self.assertEqual(
+            set(self.middleware._get_whitelisted_paths()),
+            {'ham/', 'eggs/'},
+        )
+
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/', 'eggs/']
+    )
+    def test_path_whitelist_passes_exact_check_when_configured(self):
+        self.request.path = 'ham/'
+        self.assertTrue(
+            self.middleware._is_path_whitelisted(self.request)
+        )
+
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/', 'eggs/']
+    )
+    def test_path_whitelist_passes_child_check_when_configured(self):
+        self.request.path = 'ham/bacon/spam/'
+        self.assertTrue(
+            self.middleware._is_path_whitelisted(self.request)
+        )
+
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/', 'eggs/']
+    )
+    def test_path_whitelist_fails_check_when_configured(self):
+        self.request.path = 'spam/'
+        self.assertFalse(
+            self.middleware._is_path_whitelisted(self.request)
+        )
+
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/', 'eggs/']
+    )
+    def test_path_whitelist_fails_check_for_parent_path(self):
+        with self.assertRaises(PermissionDenied):
+            self.middleware(self.request)
+
+    @override_settings(
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/', 'eggs/']
+    )
+    def test_path_whitelist_fails_check_with_wrong_path(self):
+        self.request.path = 'spam/'
+        with self.assertRaises(PermissionDenied):
+            self.middleware(self.request)
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='somelogin',
+        BASIC_AUTH_PASSWORD='somepassword',
+        BASIC_AUTH_WHITELISTED_PATHS=['ham/', 'eggs/'],
+    )
+    def test_path_whitelist_has_precedence_over_basic_auth(self):
+        self.request.path = 'ham/'
+        try:
+            self.middleware(self.request)
+        except:
+            self.fail("self.middleware() raised an error unexpectedly for a whitelisted path")
+
+    def test_path_whitelist_check_when_settings_empty(self):
+        self.request.path = 'spam/'
+        self.assertFalse(
+            self.middleware._is_path_whitelisted(self.request)
+        )
+
     def test_get_response_class_when_none_set(self):
         self.assertIs(self.middleware.get_response_class(),
                       HttpUnauthorizedResponse)
