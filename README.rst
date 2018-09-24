@@ -97,6 +97,26 @@ site.**
        'your-public-domain.com',
    ]
 
+
+``BASIC_AUTH_WHITELISTED_PATHS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set a list of paths that your website will serve without basic authentication.
+This can be used to support API integrations for example with third-party
+services which don't support basic authentication.
+
+Paths listed in the setting ``BASIC_AUTH_WHITELISTED_PATHS`` are treated as roots, and any subpath will be whitelisted too. For example:
+
+.. code:: python
+
+    BASIC_AUTH_WHITELISTED_PATHS = [
+        'api',
+    ]
+
+This will open up the path https://mydomain.com/api/, as well as anything
+below it, e.g. https://mydomain.com/api/document/1/.
+
+
 ``BASIC_AUTH_RESPONSE_TEMPLATE``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
