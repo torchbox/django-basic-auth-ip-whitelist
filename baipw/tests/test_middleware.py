@@ -52,6 +52,10 @@ class TestMiddleware(TestCase):
         networks = list(self.middleware._get_whitelisted_networks())
         self.assertEqual(len(networks), 0)
 
+    #
+    # IP whitelisting tests
+    #
+
     @override_settings(
         BASIC_AUTH_WHITELISTED_IP_NETWORKS=[
             '192.168.0.0/24',
@@ -133,6 +137,10 @@ class TestMiddleware(TestCase):
     def test_whitelisted_http_host_setting_when_setting_not_set(self):
         self.assertFalse(list(self.middleware._get_whitelisted_http_hosts()))
 
+    #
+    # HTTP Host whitelisting tests
+    #
+
     @override_settings(
         BASIC_AUTH_WHITELISTED_HTTP_HOSTS=['dgg.gg']
     )
@@ -203,6 +211,10 @@ class TestMiddleware(TestCase):
         self.request.META['HTTP_HOST'] = 'dgg.gg'
         # It does not raise.
         self.middleware(self.request)
+
+    #
+    # Path whitelisting tests
+    #
 
     @override_settings(
         BASIC_AUTH_WHITELISTED_PATHS=['ham/']
@@ -290,6 +302,10 @@ class TestMiddleware(TestCase):
         self.assertFalse(
             self.middleware._is_path_whitelisted(self.request)
         )
+
+    #
+    # Response class tests
+    #
 
     def test_get_response_class_when_none_set(self):
         self.assertIs(self.middleware.get_response_class(),
