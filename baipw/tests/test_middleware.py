@@ -237,7 +237,7 @@ class TestMiddleware(TestCase):
     @override_settings(
         BASIC_AUTH_WHITELISTED_PATHS='ham/,eggs/'
     )
-    def test_whitelisted_path_setting_when_setting_set_multiple_comma_delimited(self):
+    def test_whitelisted_path_setting_when_multiple_set_as_string(self):
         self.assertEqual(
             set(self.middleware._get_whitelisted_paths()),
             {'ham/', 'eggs/'},
@@ -294,8 +294,9 @@ class TestMiddleware(TestCase):
         self.request.path = 'ham/'
         try:
             self.middleware(self.request)
-        except:
-            self.fail("self.middleware() raised an error unexpectedly for a whitelisted path")
+        except Exception:
+            self.fail("self.middleware() raised an error unexpectedly for a "
+                      "whitelisted path")
 
     def test_path_whitelist_check_when_settings_empty(self):
         self.request.path = 'spam/'
