@@ -22,7 +22,7 @@ Installation
 
 The package is on
 `PyPI <https://pypi.org/project/django-basic-auth-ip-whitelist/>`__ so you can
-just install if with pip.
+just install it with pip.
 
 .. code:: sh
 
