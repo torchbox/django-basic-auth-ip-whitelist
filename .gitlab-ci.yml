@@ -112,3 +112,27 @@ py37-dj21:
   stage: test
   script:
     - tox -e py37-dj21
+
+py36-dj22:
+  image: python:3.6
+  stage: test
+  script:
+    - tox -e py36-dj22
+
+py37-dj22:
+  image: python:3.7
+  stage: test
+  script:
+    - tox -e py37-dj22
+
+py36-djmaster:
+  image: python:3.6
+  stage: test
+  script:
+    - tox -e py36-djmaster
+
+py37-djmaster:
+  image: python:3.7
+  stage: test
+  script:
+    - tox -e py37-djmaster
