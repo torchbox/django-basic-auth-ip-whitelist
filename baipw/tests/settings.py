@@ -8,7 +8,6 @@ TESTS_PATH = dirname(abspath(__file__))
 SECRET_KEY = get_random_string(50)
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
