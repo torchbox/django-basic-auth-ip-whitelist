@@ -4,6 +4,7 @@ In development
 * Include HTML and textual files in the package.
 * Delete "Authorization" header when it is used by the middleware (`#11 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/issues/11>`_)
 * Use CF-Connecting-IP HTTP header for checking the client's IP address.
+* Add `BASIC_AUTH_WHITELISTED_PATHS` setting.
 
 0.3a0 - 23rd September 2018
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
