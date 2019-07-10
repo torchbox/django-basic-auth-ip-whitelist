@@ -19,6 +19,10 @@ def get_client_ip(request):
         cf_connecting_ip or x_forwarded_for or remote_addr
     )
 
+    # If no IP address was attached to the address, return nothing.
+    if final_ip is None:
+        return
+
     # If there is a list of IPs provided, use the last one (should be
     # the most recent one). This may not work on Google Cloud.
     return final_ip.split(',')[-1].strip()
