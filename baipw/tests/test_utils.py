@@ -79,3 +79,9 @@ class TestGetClientIP(TestCase):
         self.assertIn('REMOTE_ADDR', self.request.META)
         # Should use the last IP from the list.
         self.assertEqual(get_client_ip(self.request), '5.123.2.45')
+
+    def test_get_client_ip_prioritises_cloudflare_ip(self):
+        self.request.META['HTTP_CF_CONNECTING_IP'] = '72.123.123.90'
+        self.request.META['HTTP_X_FORWARDED_FOR'] = '110.123.123.89'
+        self.assertIn('REMOTE_ADDR', self.request.META)
+        self.assertEqual(get_client_ip(self.request), '72.123.123.90')
