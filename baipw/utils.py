@@ -4,12 +4,24 @@ from .exceptions import Unauthorized
 
 
 def get_client_ip(request):
+    # IP retrieved from CloudFlare
+    cf_connecting_ip = request.META.get('HTTP_CF_CONNECTING_IP')
+
+    # Header usually set by proxies
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if not x_forwarded_for:
-        return request.META.get('REMOTE_ADDR')
-    # If there is a list of IPs provided, use the last one.
-    # This may not work on Google Cloud.
-    return x_forwarded_for.split(',')[-1].strip()
+
+    # Header set by the connecting party, usually not the actual client making
+    # the request, but a web server that the request goes through.
+    remote_addr = request.META.get('REMOTE_ADDR')
+
+    # Prioritise IPs from proxies.
+    final_ip = (
+        cf_connecting_ip or x_forwarded_for or remote_addr
+    )
+
+    # If there is a list of IPs provided, use the last one (should be
+    # the most recent one). This may not work on Google Cloud.
+    return final_ip.split(',')[-1].strip()
 
 
 def authorize(request, configured_username, configured_password):
