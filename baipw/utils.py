@@ -17,11 +17,17 @@ def authorize(request, configured_username, configured_password):
     Match authorization header present in the request against
     configured username and password.
     """
+    # Use request.META instead of request.headers to make it
+    # compatible with Django versions below 2.2.
     if 'HTTP_AUTHORIZATION' not in request.META:
         raise Unauthorized(
             '"HTTP_AUTHORIZATION" is not present in the request object.'
         )
-    authentication = request.META['HTTP_AUTHORIZATION']
+
+    # Delete "Authorization" header so other authentication
+    # mechanisms do not try to use it.
+    authentication = request.META.pop('HTTP_AUTHORIZATION')
+
     authentication_tuple = authentication.split(' ', 1)
     if len(authentication_tuple) != 2:
         raise Unauthorized('Invalid format of the authorization header.')

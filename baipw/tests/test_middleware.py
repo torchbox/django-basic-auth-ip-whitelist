@@ -1,6 +1,7 @@
 from unittest import mock
 from unittest.mock import MagicMock
 
+import django
 from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, TestCase, override_settings
 
@@ -251,3 +252,43 @@ class TestMiddleware(TestCase):
         )
         self.middleware(self.request)
         self.get_response_mock.assert_called_once_with(self.request)
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='test',
+        BASIC_AUTH_PASSWORD='test',
+    )
+    def test_authoritzation_header_consumed_with_correct_credentials(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
+        self.middleware(self.request)
+        self.assertNotIn('HTTP_AUTHORIZATION', self.request.META)
+        if django.VERSION >= (2, 2):
+            self.assertNotIn('AUTHORIZATION', self.request.headers)
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='testtest',
+        BASIC_AUTH_PASSWORD='testtest',
+    )
+    def test_authoritzation_header_consumed_with_incorrect_credentials(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
+        self.middleware(self.request)
+        self.assertNotIn('HTTP_AUTHORIZATION', self.request.META)
+        if django.VERSION >= (2, 2):
+            self.assertNotIn('AUTHORIZATION', self.request.headers)
+
+    @override_settings(
+        BASIC_AUTH_LOGIN=None,
+        BASIC_AUTH_PASSWORD=None,
+        BASIC_AUTH_WHITELISTED_IP_NETWORKS=[
+            '74.150.52.0/24',
+        ]
+    )
+    def test_authoritzation_header_not_consumed_when_auth_not_configured(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
+        self.request.META['REMOTE_ADDR'] = '74.150.52.64'
+        self.middleware(self.request)
+        self.assertIn('HTTP_AUTHORIZATION', self.request.META)
+        self.assertEqual(
+            self.request.META['HTTP_AUTHORIZATION'], 'Basic dGVzdDp0ZXN0'
+        )
+        if django.VERSION >= (2, 2):
+            self.assertIn('AUTHORIZATION', self.request.headers)
