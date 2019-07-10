@@ -1,5 +1,5 @@
-In development
-~~~~~~~~~~~~~~
+0.3.1 - 18 July 2019
+~~~~~~~~~~~~~~~~~~~~
 
 * Include HTML and textual files in the package.
 * Delete "Authorization" header when it is used by the middleware (`#11 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/issues/11>`_)

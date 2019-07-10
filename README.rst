@@ -14,8 +14,8 @@ certain IP networks.
 Requirements
 ------------
 
--  Django 1.8, 1.9, 1.10, 1.11 and 2
--  Python 3.4, 3.5, 3.6 and 3.7
+-  Django 1.8, 1.9, 1.10, 1.11, 2.0, 2.1 or 2.2.
+-  Python 3.4, 3.5, 3.6 or 3.7
 
 Installation
 ------------
