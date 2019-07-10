@@ -111,7 +111,7 @@ Paths listed in the setting ``BASIC_AUTH_WHITELISTED_PATHS`` are treated as root
 .. code:: python
 
     BASIC_AUTH_WHITELISTED_PATHS = [
-        'api',
+        '/api',
     ]
 
 This will open up the path https://mydomain.com/api/, as well as anything
