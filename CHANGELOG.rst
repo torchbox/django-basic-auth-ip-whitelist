@@ -1,5 +1,5 @@
-0.3.2 - In development
-~~~~~~~~~~~~~~~~~~~~~~
+0.3.2a0 - 5 December 2019
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Add Django 3 support.
 
