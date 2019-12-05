@@ -17,6 +17,8 @@ isort:
   script:
     - tox -e isort
 
+#Django 1.8
+
 py34-dj18:
   image: python:3.4
   stage: test
@@ -29,6 +31,7 @@ py35-dj18:
   script:
     - tox -e py35-dj18
 
+# Django 1.9
 py34-dj19:
   image: python:3.4
   stage: test
@@ -41,6 +44,8 @@ py35-dj19:
   script:
     - tox -e py35-dj19
 
+# Django 1.10
+
 py34-dj110:
   image: python:3.4
   stage: test
@@ -52,6 +57,8 @@ py35-dj110:
   stage: test
   script:
     - tox -e py35-dj110
+
+# Django 1.11
 
 py34-dj111:
   image: python:3.4
@@ -70,6 +77,8 @@ py36-dj111:
   stage: test
   script:
     - tox -e py36-dj111
+
+# Django 2.0
 
 py34-dj20:
   image: python:3.4
@@ -95,6 +104,8 @@ py37-dj20:
   script:
     - tox -e py37-dj20
 
+# Django 2.1
+
 py35-dj21:
   image: python:3.5
   stage: test
@@ -113,6 +124,14 @@ py37-dj21:
   script:
     - tox -e py37-dj21
 
+# Django 2.2
+
+py35-dj22:
+  image: python:3.5
+  stage: test
+  script:
+    - tox -e py35-dj22
+
 py36-dj22:
   image: python:3.6
   stage: test
@@ -125,6 +144,32 @@ py37-dj22:
   script:
     - tox -e py37-dj22
 
+py38-dj22:
+  image: python:3.8
+  stage: test
+  script:
+    - tox -e py38-dj22
+
+# Django 3.0
+py36-dj30:
+  image: python:3.6
+  stage: test
+  script:
+    - tox -e py36-dj30
+
+py37-dj30:
+  image: python:3.7
+  stage: test
+  script:
+    - tox -e py37-dj30
+
+py38-dj30:
+  image: python:3.8
+  stage: test
+  script:
+    - tox -e py38-dj30
+
+# Django master
 py36-djmaster:
   image: python:3.6
   stage: test
@@ -136,3 +181,9 @@ py37-djmaster:
   stage: test
   script:
     - tox -e py37-djmaster
+
+py38-djmaster:
+  image: python:3.8
+  stage: test
+  script:
+    - tox -e py38-djmaster
