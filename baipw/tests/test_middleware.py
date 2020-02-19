@@ -406,5 +406,3 @@ class TestMiddleware(TestCase):
         self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
         self.middleware(self.request)
         self.assertIn('HTTP_AUTHORIZATION', self.request.META)
-        if django.VERSION >= (2, 2):
-            self.assertIn('AUTHORIZATION', self.request.headers)
