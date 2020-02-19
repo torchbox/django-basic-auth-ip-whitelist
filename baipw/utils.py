@@ -1,5 +1,7 @@
 import base64
 
+from django.conf import settings
+
 from .exceptions import Unauthorized
 
 
@@ -40,9 +42,17 @@ def authorize(request, configured_username, configured_password):
             '"HTTP_AUTHORIZATION" is not present in the request object.'
         )
 
-    # Delete "Authorization" header so other authentication
-    # mechanisms do not try to use it.
-    authentication = request.META.pop('HTTP_AUTHORIZATION')
+    authentication = request.META['HTTP_AUTHORIZATION']
+
+    disable_consumption = getattr(
+        settings,
+        'BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER',
+        False,
+    )
+    if not disable_consumption:
+        # Delete "Authorization" header so other authentication
+        # mechanisms do not try to use it.
+        request.META.pop('HTTP_AUTHORIZATION')
 
     authentication_tuple = authentication.split(' ', 1)
     if len(authentication_tuple) != 2:

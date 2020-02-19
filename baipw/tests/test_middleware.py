@@ -396,3 +396,15 @@ class TestMiddleware(TestCase):
         )
         if django.VERSION >= (2, 2):
             self.assertIn('AUTHORIZATION', self.request.headers)
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='testtest',
+        BASIC_AUTH_PASSWORD='testtest',
+        BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER=True,
+    )
+    def test_auth_header_not_consumed_with_consumption_disabled(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
+        self.middleware(self.request)
+        self.assertIn('HTTP_AUTHORIZATION', self.request.META)
+        if django.VERSION >= (2, 2):
+            self.assertIn('AUTHORIZATION', self.request.headers)
