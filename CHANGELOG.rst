@@ -1,15 +1,20 @@
-0.3.3a0 - 20 February 2020
+0.3.3 - 20th February 2020
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Do not include tests in the package
+
+0.3.3a0 - 20th February 2020
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Add `BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER` setting (`#13 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/issues/13>`_)
 
-0.3.2a0 - 5 December 2019
-~~~~~~~~~~~~~~~~~~~~~~~~~
+0.3.2a0 - 5th December 2019
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Add Django 3 support.
 
-0.3.1 - 18 July 2019
-~~~~~~~~~~~~~~~~~~~~
+0.3.1 - 18th July 2019
+~~~~~~~~~~~~~~~~~~~~~~
 
 * Include HTML and textual files in the package.
 * Delete "Authorization" header when it is used by the middleware (`#11 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/issues/11>`_)
