@@ -1,7 +1,6 @@
 from unittest import mock
 from unittest.mock import MagicMock
 
-import django
 from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, TestCase, override_settings
 
@@ -400,7 +399,6 @@ class TestMiddleware(TestCase):
         self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
         self.middleware(self.request)
         self.assertIn('HTTP_AUTHORIZATION', self.request.META)
-
 
     @override_settings(
         BASIC_AUTH_LOGIN='testtest',
