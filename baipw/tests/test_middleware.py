@@ -390,3 +390,33 @@ class TestMiddleware(TestCase):
         self.assertEqual(
             self.request.META['HTTP_AUTHORIZATION'], 'Basic dGVzdDp0ZXN0'
         )
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='testtest',
+        BASIC_AUTH_PASSWORD='testtest',
+        BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER=True,
+    )
+    def test_auth_header_not_consumed_with_consumption_disabled(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
+        self.middleware(self.request)
+        self.assertIn('HTTP_AUTHORIZATION', self.request.META)
+
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='testtest',
+        BASIC_AUTH_PASSWORD='testtest',
+        BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER=False,
+    )
+    def test_auth_header_consumed_with_consumption_enabled_explicitly(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
+        self.middleware(self.request)
+        self.assertNotIn('HTTP_AUTHORIZATION', self.request.META)
+
+    @override_settings(
+        BASIC_AUTH_LOGIN='testtest',
+        BASIC_AUTH_PASSWORD='testtest',
+    )
+    def test_auth_header_consumed_with_consumption_enabled_implicitly(self):
+        self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
+        self.middleware(self.request)
+        self.assertNotIn('HTTP_AUTHORIZATION', self.request.META)
