@@ -141,7 +141,7 @@ Provide the path as a string.
 
 
 ``BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Set this setting to True if you want the Authorization HTTP header to not be deleted from the request object after it has been used by this package's middleware.
 
