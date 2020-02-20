@@ -1,3 +1,8 @@
+0.3.3a0 - 20 February 2020
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Add `BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER` setting (`#13 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/issues/13>`_)
+
 0.3.2a0 - 5 December 2019
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
