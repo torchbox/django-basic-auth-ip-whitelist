@@ -365,8 +365,6 @@ class TestMiddleware(TestCase):
         self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
         self.middleware(self.request)
         self.assertNotIn('HTTP_AUTHORIZATION', self.request.META)
-        if django.VERSION >= (2, 2):
-            self.assertNotIn('AUTHORIZATION', self.request.headers)
 
     @override_settings(
         BASIC_AUTH_LOGIN='testtest',
@@ -376,8 +374,6 @@ class TestMiddleware(TestCase):
         self.request.META['HTTP_AUTHORIZATION'] = 'Basic dGVzdDp0ZXN0'
         self.middleware(self.request)
         self.assertNotIn('HTTP_AUTHORIZATION', self.request.META)
-        if django.VERSION >= (2, 2):
-            self.assertNotIn('AUTHORIZATION', self.request.headers)
 
     @override_settings(
         BASIC_AUTH_LOGIN=None,
@@ -394,5 +390,3 @@ class TestMiddleware(TestCase):
         self.assertEqual(
             self.request.META['HTTP_AUTHORIZATION'], 'Basic dGVzdDp0ZXN0'
         )
-        if django.VERSION >= (2, 2):
-            self.assertIn('AUTHORIZATION', self.request.headers)
