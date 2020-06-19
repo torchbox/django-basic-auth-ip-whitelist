@@ -1,6 +1,7 @@
 import base64
 
 from django.conf import settings
+from django.utils.crypto import constant_time_compare
 
 from .exceptions import Unauthorized
 
@@ -57,6 +58,8 @@ def authorize(request, configured_username, configured_password):
         raise Unauthorized('"Basic" is not an authorization method.')
     auth = base64.b64decode(auth.strip()).decode("utf-8")
     username, password = auth.split(":", 1)
-    if username == configured_username and password == configured_password:
+    username_valid = constant_time_compare(username, configured_username)
+    password_valid = constant_time_compare(password, configured_password)
+    if username_valid & password_valid:
         return True
     raise Unauthorized("Basic authentication credentials are invalid.")
