@@ -33,6 +33,13 @@ jobs:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
         django-version: [18, 19, 110, 111, 20, 21, 22, 30, master]
+
+        # Allow failures on Django master branch test.
+        include:
+          - python-version: 3.8
+            django-version: master
+            experimental: true
+
         exclude:
           # Python 3.5
           - python-version: 3.5
