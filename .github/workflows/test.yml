@@ -1,0 +1,99 @@
+name: Test
+
+on: [push]
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        toxenv: [isort, flake8]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: ${{ matrix.toxenv }}
+        env:
+          TOXENV: ${{ matrix.toxenv }}
+        run: tox
+
+  test:
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+        django-version: [18, 19, 110, 111, 20, 21, 22, 30, master]
+        exclude:
+          # Python 3.5
+          - python-version: 3.5
+            django-version: 30
+          - python-version: 3.5
+            django-version: master
+
+          # Python 3.6
+          - python-version: 3.6
+            django-version: 18
+          - python-version: 3.6
+            django-version: 19
+          - python-version: 3.6
+            django-version: 110
+          - python-version: 3.6
+            django-version: master
+
+          # Python 3.7
+          - python-version: 3.7
+            django-version: 18
+          - python-version: 3.7
+            django-version: 19
+          - python-version: 3.7
+            django-version: 110
+          - python-version: 3.7
+            django-version: 111
+          - python-version: 3.7
+            django-version: master
+
+          # Python 3.8
+          - python-version: 3.8
+            django-version: 18
+          - python-version: 3.8
+            django-version: 19
+          - python-version: 3.8
+            django-version: 110
+          - python-version: 3.8
+            django-version: 111
+          - python-version: 3.8
+            django-version: 111
+          - python-version: 3.8
+            django-version: 20
+          - python-version: 3.8
+            django-version: 21
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: tox
+        env:
+          TOXENV: py-dj${{ matrix.django-version }}
+        run: tox
