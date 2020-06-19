@@ -1,6 +1,14 @@
 django-basic-auth-ip-whitelist
 ==============================
 
+.. image:: https://github.com/tm-kn/django-basic-auth-ip-whitelist/workflows/Test/badge.svg
+   :alt: GitHub actions CI status
+   :target: https://github.com/tm-kn/django-basic-auth-ip-whitelist/actions/
+.. image:: https://img.shields.io/pypi/v/django-basic-auth-ip-whitelist.svg
+   :target: https://pypi.org/project/django-basic-auth-ip-whitelist/
+.. image:: https://img.shields.io/pypi/dm/django-basic-auth-ip-whitelist.svg
+   :target: https://pypi.org/project/django-basic-auth-ip-whitelist/
+
 This simple package ships middleware that lets you to set basic authentication
 and IP whitelisting via Django settings.
 
