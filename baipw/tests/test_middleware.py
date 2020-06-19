@@ -49,14 +49,14 @@ class TestMiddleware(TestCase):
     #
 
     @override_settings(
-        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["192.168.0.0/24", "2001:db00::0/24",]
+        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["192.168.0.0/24", "2001:db00::0/24"]
     )
     def test_whitelisted_networks_when_set(self):
         networks = list(self.middleware._get_whitelisted_networks())
         self.assertEqual(len(networks), 2)
 
     @override_settings(
-        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["192.168.0.0/24", "2001:db00::0/24",]
+        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["192.168.0.0/24", "2001:db00::0/24"]
     )
     def test_is_ip_whitelisted(self):
         self.request.META["REMOTE_ADDR"] = "192.168.0.25"
@@ -65,7 +65,7 @@ class TestMiddleware(TestCase):
         self.assertTrue(self.middleware._is_ip_whitelisted(self.request))
 
     @override_settings(
-        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["192.168.0.0/24", "2001:db00::0/24",]
+        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["192.168.0.0/24", "2001:db00::0/24"]
     )
     def test_is_ip_whitelisted_invalid_ip(self):
         self.request.META["REMOTE_ADDR"] = "192.168.1.25"
@@ -83,7 +83,7 @@ class TestMiddleware(TestCase):
     @override_settings(
         BASIC_AUTH_LOGIN="somelogin",
         BASIC_AUTH_PASSWORD="somepassword",
-        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["45.21.123.0/24",],
+        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["45.21.123.0/24"],
     )
     def test_basic_auth_not_used_if_on_whitelisted_network(self):
         self.request.META["REMOTE_ADDR"] = "45.21.123.45"
@@ -300,7 +300,7 @@ class TestMiddleware(TestCase):
     @override_settings(
         BASIC_AUTH_LOGIN=None,
         BASIC_AUTH_PASSWORD=None,
-        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["74.150.52.0/24",],
+        BASIC_AUTH_WHITELISTED_IP_NETWORKS=["74.150.52.0/24"],
     )
     def test_authoritzation_header_not_consumed_when_auth_not_configured(self):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic dGVzdDp0ZXN0"

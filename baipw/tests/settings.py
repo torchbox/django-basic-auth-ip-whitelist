@@ -18,7 +18,7 @@ INSTALLED_APPS = [
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [join(TESTS_PATH, "templates"),],
+        "DIRS": [join(TESTS_PATH, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -30,7 +30,7 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "db.sqlite3",}}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "db.sqlite3"}}
 
 ROOT_URLCONF = "baipw.tests.urls"
 

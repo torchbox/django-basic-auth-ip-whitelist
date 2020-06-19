@@ -22,12 +22,6 @@ jobs:
       - name: Build Python package
         run: python setup.py bdist_wheel sdist
 
-      - name: Upload Python package
-        uses: actions/upload-artifact@v1
-        with:
-          name: dist
-          path: dist
-
       - name: Publish a Python distribution to test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:

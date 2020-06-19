@@ -23,16 +23,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
-      - name: ${{ matrix.toxenv }}
+      - name: Run tox - ${{ matrix.toxenv }}
         env:
           TOXENV: ${{ matrix.toxenv }}
         run: tox
 
   test:
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
         django-version: [18, 19, 110, 111, 20, 21, 22, 30, master]
+        experimental: [false]
 
         # Allow failures on Django master branch test.
         include:
@@ -84,6 +86,8 @@ jobs:
             django-version: 20
           - python-version: 3.8
             django-version: 21
+          - python-version: 3.8
+            django-version: master
 
     runs-on: ubuntu-latest
 
@@ -100,7 +104,34 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
-      - name: tox
+      - name: Run tox - Python ${{ matrix.python-version}}, Django ${{ matrix.django-version }}
         env:
           TOXENV: py-dj${{ matrix.django-version }}
         run: tox
+
+  build:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade setuptools wheel twine
+
+      - name: Build Python packages
+        run: python setup.py bdist_wheel sdist
+
+      - name: twine check
+        run: twine check dist/*
+
+      - name: Upload Python packages artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Python Packages
+          path: dist
