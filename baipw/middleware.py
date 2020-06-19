@@ -21,12 +21,10 @@ class BasicAuthIPWhitelistMiddleware:
 
     def process_request(self, request):
         # If this attribute is set, skip the check.
-        if getattr(request, '_skip_basic_auth_ip_whitelist_middleware_check',
-                   False):
+        if getattr(request, "_skip_basic_auth_ip_whitelist_middleware_check", False):
             return self.get_response(request)
 
-        setattr(request, '_skip_basic_auth_ip_whitelist_middleware_check',
-                True)
+        setattr(request, "_skip_basic_auth_ip_whitelist_middleware_check", True)
         # Check if http host is whitelisted.
         if self._is_http_host_whitelisted(request):
             return
@@ -44,11 +42,11 @@ class BasicAuthIPWhitelistMiddleware:
 
     @property
     def basic_auth_login(self):
-        return getattr(settings, 'BASIC_AUTH_LOGIN', None)
+        return getattr(settings, "BASIC_AUTH_LOGIN", None)
 
     @property
     def basic_auth_password(self):
-        return getattr(settings, 'BASIC_AUTH_PASSWORD', None)
+        return getattr(settings, "BASIC_AUTH_PASSWORD", None)
 
     def get_response_class(self):
         try:
@@ -63,20 +61,18 @@ class BasicAuthIPWhitelistMiddleware:
             return self.get_response_class()(request=request)
 
     def _get_client_ip(self, request):
-        function_path = getattr(
-            settings, 'BASIC_AUTH_GET_CLIENT_IP_FUNCTION', None
-        )
+        function_path = getattr(settings, "BASIC_AUTH_GET_CLIENT_IP_FUNCTION", None)
         func = get_client_ip
         if function_path is not None:
             func = import_string(function_path)
         return func(request)
 
     def _get_whitelisted_networks(self):
-        networks = getattr(settings, 'BASIC_AUTH_WHITELISTED_IP_NETWORKS', [])
+        networks = getattr(settings, "BASIC_AUTH_WHITELISTED_IP_NETWORKS", [])
         # If we get a list, users probably passed a list of strings in
         #  the settings, probably from the environment.
         if isinstance(networks, str):
-            networks = networks.split(',')
+            networks = networks.split(",")
         # Otherwise assume that the list is iterable.
         for network in networks:
             network = network.strip()
@@ -85,11 +81,11 @@ class BasicAuthIPWhitelistMiddleware:
             yield ipaddress.ip_network(network)
 
     def _get_whitelisted_http_hosts(self):
-        http_hosts = getattr(settings, 'BASIC_AUTH_WHITELISTED_HTTP_HOSTS', [])
+        http_hosts = getattr(settings, "BASIC_AUTH_WHITELISTED_HTTP_HOSTS", [])
         # If we get a list, users probably passed a list of strings in
         #  the settings, probably from the environment.
         if isinstance(http_hosts, str):
-            http_hosts = http_hosts.split(',')
+            http_hosts = http_hosts.split(",")
         # Otherwise assume that the list is iterable.
         for http_host in http_hosts:
             http_host = http_host.strip()
@@ -98,11 +94,11 @@ class BasicAuthIPWhitelistMiddleware:
             yield http_host
 
     def _get_whitelisted_paths(self):
-        paths = getattr(settings, 'BASIC_AUTH_WHITELISTED_PATHS', [])
+        paths = getattr(settings, "BASIC_AUTH_WHITELISTED_PATHS", [])
         # If we get a list, users probably passed a list of strings in
         #  the settings, probably from the environment.
         if isinstance(paths, str):
-            paths = paths.split(',')
+            paths = paths.split(",")
         # Otherwise assume that the list is iterable.
         for path in paths:
             path = path.strip()
