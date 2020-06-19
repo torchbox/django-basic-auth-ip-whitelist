@@ -6,7 +6,7 @@ jobs:
   lint:
     strategy:
       matrix:
-        toxenv: [isort, flake8]
+        toxenv: [isort, flake8, black]
 
     runs-on: ubuntu-latest
 
