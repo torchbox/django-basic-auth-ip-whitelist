@@ -19,6 +19,12 @@ This package has been created for staging and demo sites that need to be
 completely hidden from the Internet behind a password or accessible only to
 certain IP networks.
 
+Do not depend on this package to protect highly valuable information. This
+package is at a good way to disable staging sites being discovered by
+search engines and Internet users trying to access staging sites. It is
+advised that any sensitive information is protected using `Django authentication
+system <https://docs.djangoproject.com/en/stable/topics/auth/>`_.
+
 Requirements
 ------------
 
