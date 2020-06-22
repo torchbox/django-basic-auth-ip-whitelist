@@ -1,5 +1,5 @@
-0.3.4 - XXXXXXXXXXXXXXXXXX
---------------------------
+0.3.4 - 22nd June 2020
+----------------------
 
 * Fix potential timing attack if basic authentication is enabled (GHSA-m38j-pmg3-v5x5)
 
