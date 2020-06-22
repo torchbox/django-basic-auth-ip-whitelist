@@ -1,17 +1,17 @@
 0.3.4 - 22nd June 2020
 ----------------------
 
-* Fix potential timing attack if basic authentication is enabled (GHSA-m38j-pmg3-v5x5)
+* Fix potential timing attack if basic authentication is enabled (GHSA-m38j-pmg3-v5x5).
 
 0.3.3 - 20th February 2020
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Do not include tests in the package
+* Do not include tests in the package.
 
 0.3.3a0 - 20th February 2020
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Add `BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER` setting (`#13 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/issues/13>`_)
+* Add `BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER` setting.
 
 0.3.2a0 - 5th December 2019
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,30 +22,30 @@
 ~~~~~~~~~~~~~~~~~~~~~~
 
 * Include HTML and textual files in the package.
-* Delete "Authorization" header when it is used by the middleware (`#11 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/issues/11>`_)
+* Delete "Authorization" header when it is used by the middleware.
 * Use CF-Connecting-IP HTTP header for checking the client's IP address.
 * Add `BASIC_AUTH_WHITELISTED_PATHS` setting.
 
 0.3a0 - 23rd September 2018
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Don't crash on wrong authorization header format (`!8 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/8/>`_)
-* Add support for old-fashioned MIDDLEWARE_CLASSES (`!7 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/7/>`_)
-* Add overall Django 1.8, 1.9, 1.10 and 1.11 support (`!9 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/9/>`_)
+* Don't crash on wrong authorization header format.
+* Add support for old-fashioned MIDDLEWARE_CLASSES.
+* Add overall Django 1.8, 1.9, 1.10 and 1.11 support.
 
 0.2.1 - 20th July 2018
 ~~~~~~~~~~~~~~~~~~~~~~
 
-* Use HttpRequest.get_host instead of HTTP_HOST
+* Use HttpRequest.get_host instead of HTTP_HOST.
 
 0.2 - 7th June 2018
 ~~~~~~~~~~~~~~~~~~~
 
-* Add HTTP host header whitelist (``BASIC_AUTH_RESPONSE_TEMPLATE``) (`!2 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/2>`_)
-* Add the ``BASIC_AUTH_REALM`` setting (`!3 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/3>`_)
-* Add the ``BASIC_AUTH_RESPONSE_TEMPLATE`` setting (`!4 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/4>`_)
-* Add the ``BASIC_AUTH_RESPONSE_CLASS`` setting (`!5 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/5>`_)
-* Add an option to skip the middleware by setting ``_skip_basic_auth_ip_whitelist_middleware_check`` attribute on the request (`!6 <https://gitlab.com/tmkn/django-basic-auth-ip-whitelist/merge_requests/6>`_)
+* Add HTTP host header whitelist (``BASIC_AUTH_RESPONSE_TEMPLATE``).
+* Add the ``BASIC_AUTH_REALM`` setting.
+* Add the ``BASIC_AUTH_RESPONSE_TEMPLATE`` setting.
+* Add the ``BASIC_AUTH_RESPONSE_CLASS`` setting.
+* Add an option to skip the middleware by setting ``_skip_basic_auth_ip_whitelist_middleware_check`` attribute on the request.
 
 
 0.1 - Initial release
