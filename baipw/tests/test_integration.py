@@ -35,7 +35,8 @@ class TestIntegration(test.TestCase):
         self.assertEqual(response.status_code, 403)
 
     @test.override_settings(
-        BASIC_AUTH_LOGIN="test", BASIC_AUTH_PASSWORD="test2",
+        BASIC_AUTH_LOGIN="test",
+        BASIC_AUTH_PASSWORD="test2",
     )
     def test_basic_auth_configured(self):
         response = self.client.get("/")

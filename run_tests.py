@@ -16,7 +16,12 @@ def runtests():
     # code on Django < 1.10.
     if django.VERSION >= (1, 10):
         execute_from_command_line(
-            [sys.argv[0], "makemigrations", "--noinput", "--check",]
+            [
+                sys.argv[0],
+                "makemigrations",
+                "--noinput",
+                "--check",
+            ]
         )
     execute_from_command_line([sys.argv[0], "test"] + sys.argv[1:])
 

@@ -28,7 +28,9 @@ class TestHttpUnauthorizedResponse(TestCase):
         response = HttpUnauthorizedResponse(request=self.request)
         self.assertEqual(response.get_response_content(), DEFAULT_AUTH_TEMPLATE)
 
-    @override_settings(BASIC_AUTH_RESPONSE_TEMPLATE="test_template.html",)
+    @override_settings(
+        BASIC_AUTH_RESPONSE_TEMPLATE="test_template.html",
+    )
     def test_custom_template(self):
         response = HttpUnauthorizedResponse(request=self.request)
         self.assertEqual(

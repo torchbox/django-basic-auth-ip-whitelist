@@ -42,7 +42,9 @@ def authorize(request, configured_username, configured_password):
     authentication = request.META["HTTP_AUTHORIZATION"]
 
     disable_consumption = getattr(
-        settings, "BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER", False,
+        settings,
+        "BASIC_AUTH_DISABLE_CONSUMING_AUTHORIZATION_HEADER",
+        False,
     )
     if not disable_consumption:
         # Delete "Authorization" header so other authentication

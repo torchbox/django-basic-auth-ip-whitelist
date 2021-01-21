@@ -22,28 +22,35 @@ class TestMiddleware(TestCaseMixin, TestCase):
             self.middleware(self.request)
 
     @override_settings(
-        BASIC_AUTH_LOGIN="testlogin", BASIC_AUTH_PASSWORD="testpassword",
+        BASIC_AUTH_LOGIN="testlogin",
+        BASIC_AUTH_PASSWORD="testpassword",
     )
     def test_basic_auth_returns_401(self):
         response = self.middleware(self.request)
         self.assertEqual(response.status_code, 401)
 
-    @override_settings(BASIC_AUTH_LOGIN="testlogin",)
+    @override_settings(
+        BASIC_AUTH_LOGIN="testlogin",
+    )
     def test_is_basic_auth_configured_if_only_login_set(self):
         self.assertFalse(self.middleware._is_basic_auth_configured())
 
-    @override_settings(BASIC_AUTH_PASSWORD="testpassword",)
+    @override_settings(
+        BASIC_AUTH_PASSWORD="testpassword",
+    )
     def test_is_basic_auth_configured_if_only_password_set(self):
         self.assertFalse(self.middleware._is_basic_auth_configured())
 
     @override_settings(
-        BASIC_AUTH_LOGIN="testlogin", BASIC_AUTH_PASSWORD="testpassword",
+        BASIC_AUTH_LOGIN="testlogin",
+        BASIC_AUTH_PASSWORD="testpassword",
     )
     def test_is_basic_auth_configured_if_login_and_password_set(self):
         self.assertTrue(self.middleware._is_basic_auth_configured())
 
     @override_settings(
-        BASIC_AUTH_LOGIN="test", BASIC_AUTH_PASSWORD="test",
+        BASIC_AUTH_LOGIN="test",
+        BASIC_AUTH_PASSWORD="test",
     )
     def test_skip_basic_auth_ip_whitelist_middleware_check_attribute_set(self):
         self.assertFalse(
@@ -53,7 +60,8 @@ class TestMiddleware(TestCaseMixin, TestCase):
         self.assertTrue(self.request._skip_basic_auth_ip_whitelist_middleware_check)
 
     @override_settings(
-        BASIC_AUTH_LOGIN="test", BASIC_AUTH_PASSWORD="test",
+        BASIC_AUTH_LOGIN="test",
+        BASIC_AUTH_PASSWORD="test",
     )
     def test_the_attribute_skips(self):
         setattr(self.request, "_skip_basic_auth_ip_whitelist_middleware_check", True)
@@ -61,7 +69,8 @@ class TestMiddleware(TestCaseMixin, TestCase):
         self.get_response_mock.assert_called_once_with(self.request)
 
     @override_settings(
-        BASIC_AUTH_LOGIN="test", BASIC_AUTH_PASSWORD="test",
+        BASIC_AUTH_LOGIN="test",
+        BASIC_AUTH_PASSWORD="test",
     )
     def test_authoritzation_header_consumed_with_correct_credentials(self):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic dGVzdDp0ZXN0"
@@ -69,7 +78,8 @@ class TestMiddleware(TestCaseMixin, TestCase):
         self.assertNotIn("HTTP_AUTHORIZATION", self.request.META)
 
     @override_settings(
-        BASIC_AUTH_LOGIN="testtest", BASIC_AUTH_PASSWORD="testtest",
+        BASIC_AUTH_LOGIN="testtest",
+        BASIC_AUTH_PASSWORD="testtest",
     )
     def test_authoritzation_header_consumed_with_incorrect_credentials(self):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic dGVzdDp0ZXN0"
@@ -109,7 +119,8 @@ class TestMiddleware(TestCaseMixin, TestCase):
         self.assertNotIn("HTTP_AUTHORIZATION", self.request.META)
 
     @override_settings(
-        BASIC_AUTH_LOGIN="testtest", BASIC_AUTH_PASSWORD="testtest",
+        BASIC_AUTH_LOGIN="testtest",
+        BASIC_AUTH_PASSWORD="testtest",
     )
     def test_auth_header_consumed_with_consumption_enabled_implicitly(self):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic dGVzdDp0ZXN0"
@@ -148,7 +159,8 @@ class TestIpWhitelisting(TestCaseMixin, TestCase):
         self.assertFalse(self.middleware._is_ip_whitelisted(self.request))
 
     @override_settings(
-        BASIC_AUTH_LOGIN="randomlogin", BASIC_AUTH_PASSWORD="somepassword",
+        BASIC_AUTH_LOGIN="randomlogin",
+        BASIC_AUTH_PASSWORD="somepassword",
     )
     def test_basic_auth_credentials_settings(self):
         self.assertEqual(self.middleware.basic_auth_login, "randomlogin")
@@ -192,7 +204,8 @@ class TestHttpHostWhitelisting(TestCaseMixin, TestCase):
     @override_settings(BASIC_AUTH_WHITELISTED_HTTP_HOSTS=["dgg.gg"])
     def test_whitelisted_http_host_setting_when_setting_set(self):
         self.assertEqual(
-            list(self.middleware._get_whitelisted_http_hosts()), ["dgg.gg"],
+            list(self.middleware._get_whitelisted_http_hosts()),
+            ["dgg.gg"],
         )
 
     @override_settings(BASIC_AUTH_WHITELISTED_HTTP_HOSTS=["dgg.gg", "kernel.org"])
@@ -252,19 +265,22 @@ class TestPathWhitelisting(TestCaseMixin, TestCase):
     @override_settings(BASIC_AUTH_WHITELISTED_PATHS=["ham/"])
     def test_whitelisted_path_setting_when_setting_set(self):
         self.assertEqual(
-            list(self.middleware._get_whitelisted_paths()), ["ham/"],
+            list(self.middleware._get_whitelisted_paths()),
+            ["ham/"],
         )
 
     @override_settings(BASIC_AUTH_WHITELISTED_PATHS=["ham/", "eggs/"])
     def test_whitelisted_path_setting_when_setting_set_multiple(self):
         self.assertEqual(
-            set(self.middleware._get_whitelisted_paths()), {"ham/", "eggs/"},
+            set(self.middleware._get_whitelisted_paths()),
+            {"ham/", "eggs/"},
         )
 
     @override_settings(BASIC_AUTH_WHITELISTED_PATHS="ham/,eggs/")
     def test_whitelisted_path_setting_when_multiple_set_as_string(self):
         self.assertEqual(
-            set(self.middleware._get_whitelisted_paths()), {"ham/", "eggs/"},
+            set(self.middleware._get_whitelisted_paths()),
+            {"ham/", "eggs/"},
         )
 
     @override_settings(BASIC_AUTH_WHITELISTED_PATHS=["ham/", "eggs/"])
