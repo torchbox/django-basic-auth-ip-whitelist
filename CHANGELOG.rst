@@ -1,3 +1,8 @@
+IN DEVELOPMENT
+~~~~~~~~~~~~~~
+
+* Make default response use "never cache" header.
+
 0.3.4 - 22nd June 2020
 ~~~~~~~~~~~~~~~~~~~~~~
 
