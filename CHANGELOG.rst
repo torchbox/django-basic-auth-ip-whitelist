@@ -2,6 +2,7 @@ IN DEVELOPMENT
 ~~~~~~~~~~~~~~
 
 * Make default response use "never cache" header.
+* Add Django 4.0 support.
 
 0.3.4 - 22nd June 2020
 ~~~~~~~~~~~~~~~~~~~~~~
