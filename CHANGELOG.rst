@@ -1,5 +1,5 @@
-IN DEVELOPMENT
-~~~~~~~~~~~~~~
+0.5a - 24th January 2022
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Make default response use "never cache" header.
 * Add Django 4.0 support.
