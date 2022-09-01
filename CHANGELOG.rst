@@ -1,4 +1,4 @@
-0.5a - 24th January 2022
+0.5 - 1st September 2022
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Make default response use "never cache" header.
