@@ -68,7 +68,7 @@ class TestGetClientIP(TestCase):
         self.assertEqual(get_client_ip(self.request), "72.123.123.89")
 
     def test_get_client_ip_from_x_forwaded_for_when_multiple_values(self):
-        self.request.META["HTTP_X_FORWARDED_FOR"] = "72.123.123.89,5.123.2.45"
+        self.request.META["HTTP_X_FORWARDED_FOR"] = "5.123.2.45,72.123.123.89"
         self.assertIn("HTTP_X_FORWARDED_FOR", self.request.META)
         self.assertIn("REMOTE_ADDR", self.request.META)
         # Should use the last IP from the list.

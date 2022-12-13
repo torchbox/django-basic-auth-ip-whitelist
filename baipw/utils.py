@@ -24,9 +24,9 @@ def get_client_ip(request):
     if final_ip is None:
         return
 
-    # If there is a list of IPs provided, use the last one (should be
-    # the most recent one). This may not work on Google Cloud.
-    return final_ip.split(",")[-1].strip()
+    # If there is a list of IPs provided, use the first one as
+    # this should be the original client's IP
+    return final_ip.split(",", 1)[0].strip()
 
 
 def authorize(request, configured_username, configured_password):
