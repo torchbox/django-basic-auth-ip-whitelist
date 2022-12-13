@@ -79,3 +79,7 @@ class TestGetClientIP(TestCase):
         self.request.META["HTTP_X_FORWARDED_FOR"] = "110.123.123.89"
         self.assertIn("REMOTE_ADDR", self.request.META)
         self.assertEqual(get_client_ip(self.request), "72.123.123.90")
+
+    def test_get_client_ip_from_cloudfront(self):
+        self.request.META["HTTP_CLOUDFRONT_VIEWER_ADDRESS"] = "72.123.123.90"
+        self.assertEqual(get_client_ip(self.request), "72.123.123.90")

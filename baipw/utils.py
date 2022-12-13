@@ -7,6 +7,9 @@ from .exceptions import Unauthorized
 
 
 def get_client_ip(request):
+    # IP retrieved from CloudFront
+    cloudfront_viewer_address = request.META.get("HTTP_CLOUDFRONT_VIEWER_ADDRESS")
+
     # IP retrieved from CloudFlare
     cf_connecting_ip = request.META.get("HTTP_CF_CONNECTING_IP")
 
@@ -18,7 +21,9 @@ def get_client_ip(request):
     remote_addr = request.META.get("REMOTE_ADDR")
 
     # Prioritise IPs from proxies.
-    final_ip = cf_connecting_ip or x_forwarded_for or remote_addr
+    final_ip = (
+        cloudfront_viewer_address or cf_connecting_ip or x_forwarded_for or remote_addr
+    )
 
     # If no IP address was attached to the address, return nothing.
     if final_ip is None:
