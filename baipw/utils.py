@@ -5,25 +5,22 @@ from django.utils.crypto import constant_time_compare
 
 from .exceptions import Unauthorized
 
-
-def get_client_ip(request):
-    # IP retrieved from CloudFront
-    cloudfront_viewer_address = request.META.get("HTTP_CLOUDFRONT_VIEWER_ADDRESS")
-
-    # IP retrieved from CloudFlare
-    cf_connecting_ip = request.META.get("HTTP_CF_CONNECTING_IP")
-
-    # Header usually set by proxies
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-
+CLIENT_IP_META_CANDIDATES = [
+    "HTTP_CLOUDFRONT_VIEWER_ADDRESS",  # IP retrieved from CloudFront
+    "HTTP_CF_CONNECTING_IP",  # IP retrieved from CloudFlare
+    "HTTP_X_FORWARDED_FOR",  # Header usually set by proxies
     # Header set by the connecting party, usually not the actual client making
     # the request, but a web server that the request goes through.
-    remote_addr = request.META.get("REMOTE_ADDR")
+    "REMOTE_ADDR",
+]
 
-    # Prioritise IPs from proxies.
-    final_ip = (
-        cloudfront_viewer_address or cf_connecting_ip or x_forwarded_for or remote_addr
-    )
+
+def get_client_ip(request):
+    final_ip = None
+    for meta_candidate in CLIENT_IP_META_CANDIDATES:
+        final_ip = request.META.get(meta_candidate)
+        if final_ip:
+            break
 
     # If no IP address was attached to the address, return nothing.
     if final_ip is None:
