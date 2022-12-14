@@ -87,13 +87,9 @@ Advanced customisation
 Getting IP
 ~~~~~~~~~~
 
-If you want to have a custom behaviour when getting IP, you can create a
-custom function that takes request as a parameter and specify path to it
-in the ``BASIC_AUTH_GET_CLIENT_IP_FUNCTION`` settings, e.g.
-
-.. code:: python
-
-   BASIC_AUTH_GET_CLIENT_IP_FUNCTION = 'utils.ip.get_client_ip'
+Under the hood, `django-ipware <https://github.com/un33k/django-ipware>`_ is used
+for detecting the client's IP address. See their documentation for customization and
+security hardening.
 
 
 ``BASIC_AUTH_WHITELISTED_HTTP_HOSTS``

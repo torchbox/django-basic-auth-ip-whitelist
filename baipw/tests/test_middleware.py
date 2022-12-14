@@ -186,16 +186,6 @@ class TestIpWhitelisting(TestCaseMixin, TestCase):
         # But it called the IP check.
         ip_check_m.assert_called_once_with(self.request)
 
-    @override_settings(
-        BASIC_AUTH_GET_CLIENT_IP_FUNCTION=("baipw.tests.utils.custom_get_client_ip"),
-    )
-    def test_get_custom_get_client_ip(self):
-        with mock.patch("baipw.tests.utils.custom_get_client_ip") as m:
-            with mock.patch("baipw.utils.get_client_ip") as default_m:
-                self.middleware._get_client_ip(self.request)
-        m.self_assert_called_once_with(self.request)
-        default_m.assert_not_called()
-
     def test_whitelisted_http_host_setting_when_setting_not_set(self):
         self.assertFalse(list(self.middleware._get_whitelisted_http_hosts()))
 

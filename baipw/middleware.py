@@ -4,9 +4,11 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.utils.module_loading import import_string
 
+from ipware import get_client_ip
+
 from .exceptions import Unauthorized
 from .response import HttpUnauthorizedResponse
-from .utils import authorize, get_client_ip
+from .utils import authorize
 
 
 class BasicAuthIPWhitelistMiddleware:
@@ -61,11 +63,8 @@ class BasicAuthIPWhitelistMiddleware:
             return self.get_response_class()(request=request)
 
     def _get_client_ip(self, request):
-        function_path = getattr(settings, "BASIC_AUTH_GET_CLIENT_IP_FUNCTION", None)
-        func = get_client_ip
-        if function_path is not None:
-            func = import_string(function_path)
-        return func(request)
+        client_ip, _ = get_client_ip(request)
+        return client_ip
 
     def _get_whitelisted_networks(self):
         networks = getattr(settings, "BASIC_AUTH_WHITELISTED_IP_NETWORKS", [])
