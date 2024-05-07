@@ -6,7 +6,7 @@ from django.utils.module_loading import import_string
 
 from .exceptions import Unauthorized
 from .response import HttpUnauthorizedResponse
-from .utils import authorize, get_client_ip
+from .utils import authorize
 
 
 class BasicAuthIPWhitelistMiddleware:
@@ -61,11 +61,10 @@ class BasicAuthIPWhitelistMiddleware:
             return self.get_response_class()(request=request)
 
     def _get_client_ip(self, request):
-        function_path = getattr(settings, "BASIC_AUTH_GET_CLIENT_IP_FUNCTION", None)
-        func = get_client_ip
-        if function_path is not None:
-            func = import_string(function_path)
-        return func(request)
+        function_path = getattr(
+            settings, "BASIC_AUTH_GET_CLIENT_IP_FUNCTION", "baipw.utils.get_client_ip"
+        )
+        return import_string(function_path)(request)
 
     def _get_whitelisted_networks(self):
         networks = getattr(settings, "BASIC_AUTH_WHITELISTED_IP_NETWORKS", [])
