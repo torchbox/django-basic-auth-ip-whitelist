@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8, 3.9, "3.10"]
-        django-version: [18, 19, 110, 111, 20, 21, 22, 30, 31, 32, 40, main]
+        django-version: [18, 19, 110, 111, 20, 21, 22, 30, 31, 32, 40, 50, main]
         experimental: [false]
 
         # Allow failures on Django main branch test.
@@ -53,6 +53,8 @@ jobs:
           - python-version: 3.5
             django-version: 40
           - python-version: 3.5
+            django-version: 50
+          - python-version: 3.5
             django-version: main
 
           # Python 3.6
@@ -64,6 +66,8 @@ jobs:
             django-version: 110
           - python-version: 3.6
             django-version: 40
+          - python-version: 3.6
+            django-version: 50
           - python-version: 3.6
             django-version: main
 
@@ -78,6 +82,8 @@ jobs:
             django-version: 111
           - python-version: 3.7
             django-version: 40
+          - python-version: 3.7
+            django-version: 50
           - python-version: 3.7
             django-version: main
 
@@ -98,6 +104,8 @@ jobs:
           - python-version: 3.8
             django-version: 21
           - python-version: 3.8
+            django-version: 50
+          - python-version: 3.8
             django-version: main
 
           # Python 3.9
@@ -115,6 +123,8 @@ jobs:
             django-version: 20
           - python-version: "3.9"
             django-version: 21
+          - python-version: "3.9"
+            django-version: 50
           - python-version: "3.9"
             django-version: main
 
