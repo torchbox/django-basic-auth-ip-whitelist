@@ -124,7 +124,10 @@ class BasicAuthIPWhitelistMiddleware:
         """
         Check if IP is on the whitelisted network.
         """
-        ip_address = ipaddress.ip_address(self._get_client_ip(request))
+        client_ip = self._get_client_ip(request)
+        if client_ip is None:
+            return False
+        ip_address = ipaddress.ip_address(client_ip)
         for network in self._get_whitelisted_networks():
             if ip_address in network:
                 return True
