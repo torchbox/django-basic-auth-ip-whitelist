@@ -1,9 +1,9 @@
 django-basic-auth-ip-whitelist
 ==============================
 
-.. image:: https://github.com/tm-kn/django-basic-auth-ip-whitelist/actions/workflows/test.yml/badge.svg
+.. image:: https://github.com/torchbox/django-basic-auth-ip-whitelist/actions/workflows/test.yml/badge.svg
    :alt: GitHub actions CI status
-   :target: https://github.com/tm-kn/django-basic-auth-ip-whitelist/actions/
+   :target: https://github.com/torchbox/django-basic-auth-ip-whitelist/actions/
 .. image:: https://img.shields.io/pypi/v/django-basic-auth-ip-whitelist.svg
    :target: https://pypi.org/project/django-basic-auth-ip-whitelist/
 .. image:: https://img.shields.io/pypi/dm/django-basic-auth-ip-whitelist.svg
