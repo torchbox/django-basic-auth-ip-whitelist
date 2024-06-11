@@ -61,6 +61,8 @@ that you want to be able to access the website without authentication
 from. It must be either a string with networks separated by comma or
 Python iterable.
 
+**Warning**: See [Getting IP Address](#getting-ip-address) below for caveats around IP address detection.
+
 ``BASIC_AUTH_REALM``
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -84,12 +86,27 @@ Example settings
 Advanced customisation
 ----------------------
 
-Getting IP
-~~~~~~~~~~
+Getting IP Address
+~~~~~~~~~~~~~~~~~~
 
-If you want to have a custom behaviour when getting IP, you can create a
-custom function that takes request as a parameter and specify path to it
-in the ``BASIC_AUTH_GET_CLIENT_IP_FUNCTION`` settings, e.g.
+By default, ``BasicAuthIPWhitelistMiddleware`` uses ``request.META["REMOTE_ADDR"]``
+as the client's IP, which corresponds to the IP address connecting to Django.
+If you have a reverse proxy (eg ``nginx`` in front), this will result in the IP address of
+``nginx``, not the client.
+
+Correctly determining the IP address can vary between deployments. Guessing incorrectly can
+result in security issues. Instead, this library requires you configure this yourselves.
+
+In most deployments, the ``X-Forwarded-For`` header can be used to correctly determine the
+client's IP. We recommend `django-xff <https://github.com/ferrix/xff>`__ to help parse this
+header correctly. Because ``django-xff`` overrides ``REMOTE_ADDR`` by default, it is natively
+supported by ``BasicAuthIPWhitelistMiddleware``.
+
+`django-ipware <https://github.com/un33k/django-ipware>`__ is another popular
+library, however may take more customization to implement.
+
+To fully customize IP address detection, you can set ``BASIC_AUTH_GET_CLIENT_IP_FUNCTION`` to
+a function which takes a request and returns a valid IP address:
 
 .. code:: python
 
