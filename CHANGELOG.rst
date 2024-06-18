@@ -1,3 +1,10 @@
+0.6.0 - 18th June 2024
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Defer IP detection to the user (breaking)
+* Add Django 5.0 compatibility
+* Transfer ownership to Torchbox
+
 0.5 - 1st September 2022
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
