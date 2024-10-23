@@ -15,7 +15,7 @@ class TestAuthorize(TestCase):
             authorize(self.request, "somelogin", "somepassword")
         self.assertEqual(
             str(e.exception),
-            '"HTTP_AUTHORIZATION" is not present in the request object.',
+            "Missing Authorization header.",
         )
 
     def test_authorise_with_wrong_credentials(self):
@@ -40,6 +40,13 @@ class TestAuthorize(TestCase):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic"
         with self.assertRaises(Unauthorized) as e:
             authorize(self.request, "somelogin", "wrongpassword")
-        self.assertEqual(
-            str(e.exception), "Invalid format of the authorization header."
+        self.assertEqual(str(e.exception), "Invalid Authorization header.")
+
+    def test_multiple_header_values(self):
+        credentials = base64.b64encode(
+            "somelogin:correctpassword".encode("utf-8")
+        ).decode("utf-8")
+        self.request.META["HTTP_AUTHORIZATION"] = (
+            f"Basic {credentials},Basic {credentials}"
         )
+        self.assertTrue(authorize(self.request, "somelogin", "correctpassword"))
