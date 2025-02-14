@@ -1,3 +1,10 @@
+0.7.0 - 14th February 2025
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Support multiple Authorization headers
+* Drop support for older Python / Django versions
+* Add official support for Python 3.13 and Django 5.1
+
 0.6.0 - 18th June 2024
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
