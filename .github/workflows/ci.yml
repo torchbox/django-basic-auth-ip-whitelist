@@ -38,168 +38,21 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
-        django-version: [18, 19, 110, 111, 20, 21, 22, 30, 31, 32, 40, 41, 42, 50, main]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        django-version: [42, 50, 51, main]
         experimental: [false]
 
         # Allow failures on Django main branch test.
         include:
-          - python-version: "3.10"
-            django-version: main
-            experimental: true
-          - python-version: "3.11"
-            django-version: main
-            experimental: true
-          - python-version: "3.12"
+          - python-version: "3.13"
             django-version: main
             experimental: true
 
         exclude:
-          # Python 3.7
-          - python-version: "3.7"
-            django-version: 18
-          - python-version: "3.7"
-            django-version: 19
-          - python-version: "3.7"
-            django-version: 110
-          - python-version: "3.7"
-            django-version: 111
-          - python-version: "3.7"
-            django-version: 40
-          - python-version: "3.7"
-            django-version: 41
-          - python-version: "3.7"
-            django-version: 42
-          - python-version: "3.7"
-            django-version: 50
-          - python-version: "3.7"
-            django-version: main
-
-
-          # Python 3.8
-          - python-version: "3.8"
-            django-version: 18
-          - python-version: "3.8"
-            django-version: 19
-          - python-version: "3.8"
-            django-version: 110
-          - python-version: "3.8"
-            django-version: 111
-          - python-version: "3.8"
-            django-version: 111
-          - python-version: "3.8"
-            django-version: 20
-          - python-version: "3.8"
-            django-version: 21
-          - python-version: "3.8"
-            django-version: 50
-          - python-version: "3.8"
-            django-version: main
-
-          # Python 3.9
-          - python-version: "3.9"
-            django-version: 18
-          - python-version: "3.9"
-            django-version: 19
-          - python-version: "3.9"
-            django-version: 110
-          - python-version: "3.9"
-            django-version: 111
-          - python-version: "3.9"
-            django-version: 111
-          - python-version: "3.9"
-            django-version: 20
-          - python-version: "3.9"
-            django-version: 21
-          - python-version: "3.9"
-            django-version: 50
-          - python-version: "3.9"
-            django-version: main
-
-          # Python 3.10
-          - python-version: "3.10"
-            django-version: 18
-          - python-version: "3.10"
-            django-version: 19
-          - python-version: "3.10"
-            django-version: 110
-          - python-version: "3.10"
-            django-version: 111
-          - python-version: "3.10"
-            django-version: 111
-          - python-version: "3.10"
-            django-version: 20
-          - python-version: "3.10"
-            django-version: 21
-          - python-version: "3.10"
-            django-version: 21
-          - python-version: "3.10"
-            django-version: 22
-          - python-version: "3.10"
-            django-version: 30
-          - python-version: "3.10"
-            django-version: 31
-          - python-version: "3.10"
-            django-version: main
-
-          # Python 3.11
-          - python-version: "3.11"
-            django-version: 18
-          - python-version: "3.11"
-            django-version: 19
-          - python-version: "3.11"
-            django-version: 110
-          - python-version: "3.11"
-            django-version: 111
-          - python-version: "3.11"
-            django-version: 111
-          - python-version: "3.11"
-            django-version: 20
-          - python-version: "3.11"
-            django-version: 21
-          - python-version: "3.11"
-            django-version: 21
-          - python-version: "3.11"
-            django-version: 22
-          - python-version: "3.11"
-            django-version: 30
-          - python-version: "3.11"
-            django-version: 31
-          - python-version: "3.11"
-            django-version: 40
-          - python-version: "3.11"
-            django-version: main
-
-          # Python 3.12
-          - python-version: "3.12"
-            django-version: 18
-          - python-version: "3.12"
-            django-version: 19
-          - python-version: "3.12"
-            django-version: 110
-          - python-version: "3.12"
-            django-version: 111
-          - python-version: "3.12"
-            django-version: 111
-          - python-version: "3.12"
-            django-version: 20
-          - python-version: "3.12"
-            django-version: 21
-          - python-version: "3.12"
-            django-version: 21
-          - python-version: "3.12"
-            django-version: 22
-          - python-version: "3.12"
-            django-version: 30
-          - python-version: "3.12"
-            django-version: 31
-          - python-version: "3.12"
-            django-version: 40
-          - python-version: "3.12"
-            django-version: 41
-          - python-version: "3.12"
-            django-version: main
-
+          - django-version: 50
+            python-version: "3.9"
+          - django-version: 51
+            python-version: "3.9"
 
     runs-on: ubuntu-latest
 
@@ -216,7 +69,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
-      - name: Run tox - Python ${{ matrix.python-version}}, Django ${{ matrix.django-version }}
+      - name: Run tox - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }}
         env:
           TOXENV: py-dj${{ matrix.django-version }}
         run: tox
@@ -235,7 +88,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.12"
+        python-version: 3
     - name: Install dependencies
       run: python -m pip install --upgrade pip build
     - name: Build package
