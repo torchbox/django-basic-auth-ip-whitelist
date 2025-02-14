@@ -189,7 +189,7 @@ You can skip the middleware by setting
 
 .. code:: python
 
-   setattr(request, '_skip_basic_auth_ip_whitelist_middleware_check', True)
+   request._skip_basic_auth_ip_whitelist_middleware_check = True
 
 
 This may be handy if you have other middleware that you want to have
