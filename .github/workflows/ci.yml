@@ -10,10 +10,6 @@ on:
 
 jobs:
   lint:
-    strategy:
-      matrix:
-        toxenv: [isort, flake8, black]
-
     runs-on: ubuntu-latest
 
     steps:
@@ -29,9 +25,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
-      - name: Run tox - ${{ matrix.toxenv }}
+      - name: Run tox
         env:
-          TOXENV: ${{ matrix.toxenv }}
+          TOXENV: ruff
         run: tox
 
   test:

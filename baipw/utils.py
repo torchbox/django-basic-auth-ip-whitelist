@@ -22,9 +22,9 @@ def authorize(request, configured_username, configured_password):
     """
     # Use request.META instead of request.headers to make it
     # compatible with Django versions below 2.2.
-    authentication = request.META.get("HTTP_AUTHORIZATION")
+    authentication_header = request.META.get("HTTP_AUTHORIZATION")
 
-    if authentication is None:
+    if authentication_header is None:
         raise Unauthorized("Missing Authorization header.")
 
     disable_consumption = getattr(
@@ -37,7 +37,7 @@ def authorize(request, configured_username, configured_password):
         # mechanisms do not try to use it.
         request.META.pop("HTTP_AUTHORIZATION")
 
-    for authentication in authentication.split(","):
+    for authentication in authentication_header.split(","):
         authentication_tuple = authentication.split(" ", 1)
         if len(authentication_tuple) != 2:
             raise Unauthorized("Invalid Authorization header.")
