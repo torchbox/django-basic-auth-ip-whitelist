@@ -64,7 +64,7 @@ class TestMiddleware(TestCaseMixin, TestCase):
         BASIC_AUTH_PASSWORD="test",
     )
     def test_the_attribute_skips(self):
-        setattr(self.request, "_skip_basic_auth_ip_whitelist_middleware_check", True)
+        self.request._skip_basic_auth_ip_whitelist_middleware_check = True
         self.middleware(self.request)
         self.get_response_mock.assert_called_once_with(self.request)
 
@@ -175,10 +175,10 @@ class TestIpWhitelisting(TestCaseMixin, TestCase):
         self.request.META["REMOTE_ADDR"] = "45.21.123.45"
         self.assertTrue(self.middleware._is_basic_auth_configured())
         with mock.patch(
-            "baipw.middleware.BasicAuthIPWhitelistMiddleware." "_basic_auth_response"
+            "baipw.middleware.BasicAuthIPWhitelistMiddleware._basic_auth_response"
         ) as m:
             with mock.patch(
-                "baipw.middleware.BasicAuthIPWhitelistMiddleware." "_is_ip_whitelisted"
+                "baipw.middleware.BasicAuthIPWhitelistMiddleware._is_ip_whitelisted"
             ) as ip_check_m:
                 self.middleware(self.request)
         # Make sure middleware did not try to evaluate basic auth.
@@ -320,8 +320,7 @@ class TestPathWhitelisting(TestCaseMixin, TestCase):
             self.middleware(self.request)
         except Exception:
             self.fail(
-                "self.middleware() raised an error unexpectedly for a "
-                "whitelisted path"
+                "self.middleware() raised an error unexpectedly for a whitelisted path"
             )
 
     def test_path_whitelist_check_when_settings_empty(self):
