@@ -1,7 +1,6 @@
 import ipaddress
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.utils.module_loading import import_string
 
 from .exceptions import Unauthorized
@@ -38,7 +37,7 @@ class BasicAuthIPWhitelistMiddleware:
         if self._is_basic_auth_configured():
             return self._basic_auth_response(request)
         # Otherwise just deny the access to the website
-        raise PermissionDenied
+        return self.get_error_response(request)
 
     @property
     def basic_auth_login(self):
@@ -48,17 +47,24 @@ class BasicAuthIPWhitelistMiddleware:
     def basic_auth_password(self):
         return getattr(settings, "BASIC_AUTH_PASSWORD", None)
 
-    def get_response_class(self):
+    def get_error_response(self, request):
         try:
-            return import_string(settings.BASIC_AUTH_RESPONSE_CLASS)
+            response_class = import_string(settings.BASIC_AUTH_RESPONSE_CLASS)
         except AttributeError:
-            return HttpUnauthorizedResponse
+            response_class = HttpUnauthorizedResponse
+
+        response = response_class(request=request)
+
+        # Ensure pages can't be indexed, even if authentication is enabled.
+        response.headers["X-Robots-Tag"] = "noindex"
+
+        return response
 
     def _basic_auth_response(self, request):
         try:
             authorize(request, self.basic_auth_login, self.basic_auth_password)
         except Unauthorized:
-            return self.get_response_class()(request=request)
+            return self.get_error_response(request)
 
     def _get_client_ip(self, request):
         function_path = getattr(

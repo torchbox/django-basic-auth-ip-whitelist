@@ -1,7 +1,6 @@
 from unittest import mock
 from unittest.mock import MagicMock
 
-from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, TestCase, override_settings
 
 from baipw.middleware import BasicAuthIPWhitelistMiddleware
@@ -18,8 +17,9 @@ class TestCaseMixin:
 
 class TestMiddleware(TestCaseMixin, TestCase):
     def test_no_settings_returns_permission_denied(self):
-        with self.assertRaises(PermissionDenied):
-            self.middleware(self.request)
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.headers["X-Robots-Tag"], "noindex")
 
     @override_settings(
         BASIC_AUTH_LOGIN="testlogin",
@@ -28,6 +28,7 @@ class TestMiddleware(TestCaseMixin, TestCase):
     def test_basic_auth_returns_401(self):
         response = self.middleware(self.request)
         self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.headers["X-Robots-Tag"], "noindex")
 
     @override_settings(
         BASIC_AUTH_LOGIN="testlogin",
@@ -236,8 +237,8 @@ class TestHttpHostWhitelisting(TestCaseMixin, TestCase):
 
     @override_settings(BASIC_AUTH_WHITELISTED_HTTP_HOSTS=["kernel.org", "dgg.gg"])
     def test_http_host_whitelist_fails_check_with_no_host(self):
-        with self.assertRaises(PermissionDenied):
-            self.middleware(self.request)
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 401)
 
     @override_settings(
         ALLOWED_HOSTS=["www.example.com"],
@@ -245,8 +246,8 @@ class TestHttpHostWhitelisting(TestCaseMixin, TestCase):
     )
     def test_http_host_whitelist_fails_check_with_wrong_host(self):
         self.request.META["HTTP_HOST"] = "www.example.com"
-        with self.assertRaises(PermissionDenied):
-            self.middleware(self.request)
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 401)
 
     @override_settings(
         BASIC_AUTH_LOGIN="somelogin",
@@ -300,14 +301,14 @@ class TestPathWhitelisting(TestCaseMixin, TestCase):
 
     @override_settings(BASIC_AUTH_WHITELISTED_PATHS=["ham/", "eggs/"])
     def test_path_whitelist_fails_check_for_parent_path(self):
-        with self.assertRaises(PermissionDenied):
-            self.middleware(self.request)
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 401)
 
     @override_settings(BASIC_AUTH_WHITELISTED_PATHS=["ham/", "eggs/"])
     def test_path_whitelist_fails_check_with_wrong_path(self):
         self.request.path = "spam/"
-        with self.assertRaises(PermissionDenied):
-            self.middleware(self.request)
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 401)
 
     @override_settings(
         BASIC_AUTH_LOGIN="somelogin",
@@ -330,11 +331,15 @@ class TestPathWhitelisting(TestCaseMixin, TestCase):
 
 class TestResponseClass(TestCaseMixin, TestCase):
     def test_get_response_class_when_none_set(self):
-        self.assertIs(self.middleware.get_response_class(), HttpUnauthorizedResponse)
+        self.assertIsInstance(
+            self.middleware.get_error_response(self.request), HttpUnauthorizedResponse
+        )
 
     @override_settings(BASIC_AUTH_RESPONSE_CLASS="baipw.tests.response.TestResponse")
     def test_get_response_class_when_set(self):
-        self.assertIs(self.middleware.get_response_class(), TestResponse)
+        self.assertIsInstance(
+            self.middleware.get_error_response(self.request), TestResponse
+        )
 
     @override_settings(
         BASIC_AUTH_LOGIN="testlogin",
@@ -343,5 +348,5 @@ class TestResponseClass(TestCaseMixin, TestCase):
     )
     def test_middleware_when_custom_response_set(self):
         response = self.middleware(self.request)
-        self.assertIs(response.__class__, TestResponse)
+        self.assertIsInstance(response, TestResponse)
         self.assertEqual(response.content, b"Test message. :P")
