@@ -1,3 +1,8 @@
+0.8.0 - 10th March 2025
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* Prevent basic auth pages from being indexed
+
 0.7.0 - 14th February 2025
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
