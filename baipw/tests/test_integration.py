@@ -32,7 +32,7 @@ class TestIntegration(test.TestCase):
 
     def test_basic_auth_not_configured(self):
         response = self.client.get("/")
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     @test.override_settings(
         BASIC_AUTH_LOGIN="test",
