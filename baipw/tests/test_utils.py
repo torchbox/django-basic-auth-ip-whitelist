@@ -1,12 +1,12 @@
 import base64
 
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, SimpleTestCase
 
 from baipw.exceptions import Unauthorized
 from baipw.utils import authorize
 
 
-class TestAuthorize(TestCase):
+class TestAuthorize(SimpleTestCase):
     def setUp(self):
         self.request = RequestFactory().get("/")
 

@@ -1,9 +1,9 @@
-from django.test import RequestFactory, TestCase, override_settings
+from django.test import RequestFactory, SimpleTestCase, override_settings
 
 from baipw.response import DEFAULT_AUTH_TEMPLATE, HttpUnauthorizedResponse
 
 
-class TestHttpUnauthorizedResponse(TestCase):
+class TestHttpUnauthorizedResponse(SimpleTestCase):
     def setUp(self):
         self.request = RequestFactory().get("/")
 

@@ -1,21 +1,20 @@
 from unittest import mock
-from unittest.mock import MagicMock
 
-from django.test import RequestFactory, TestCase, override_settings
+from django.http import HttpResponse
+from django.test import RequestFactory, SimpleTestCase, override_settings
 
 from baipw.middleware import BasicAuthIPWhitelistMiddleware
 from baipw.response import HttpUnauthorizedResponse
 from baipw.tests.response import TestResponse
 
 
-class TestCaseMixin:
+class BaseTestCase(SimpleTestCase):
     def setUp(self):
-        self.get_response_mock = MagicMock()
-        self.middleware = BasicAuthIPWhitelistMiddleware(self.get_response_mock)
+        self.middleware = BasicAuthIPWhitelistMiddleware(lambda request: HttpResponse())
         self.request = RequestFactory().get("/")
 
 
-class TestMiddleware(TestCaseMixin, TestCase):
+class TestMiddleware(BaseTestCase):
     def test_no_settings_returns_permission_denied(self):
         response = self.middleware(self.request)
         self.assertEqual(response.status_code, 401)
@@ -66,8 +65,8 @@ class TestMiddleware(TestCaseMixin, TestCase):
     )
     def test_the_attribute_skips(self):
         self.request._skip_basic_auth_ip_whitelist_middleware_check = True
-        self.middleware(self.request)
-        self.get_response_mock.assert_called_once_with(self.request)
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 200)
 
     @override_settings(
         BASIC_AUTH_LOGIN="test",
@@ -129,7 +128,7 @@ class TestMiddleware(TestCaseMixin, TestCase):
         self.assertNotIn("HTTP_AUTHORIZATION", self.request.META)
 
 
-class TestIpWhitelisting(TestCaseMixin, TestCase):
+class TestIpWhitelisting(BaseTestCase):
     def test_get_whitelisted_networks_when_none_set(self):
         networks = list(self.middleware._get_whitelisted_networks())
         self.assertEqual(len(networks), 0)
@@ -201,7 +200,7 @@ class TestIpWhitelisting(TestCaseMixin, TestCase):
         self.assertFalse(list(self.middleware._get_whitelisted_http_hosts()))
 
 
-class TestHttpHostWhitelisting(TestCaseMixin, TestCase):
+class TestHttpHostWhitelisting(BaseTestCase):
     @override_settings(BASIC_AUTH_WHITELISTED_HTTP_HOSTS=["dgg.gg"])
     def test_whitelisted_http_host_setting_when_setting_set(self):
         self.assertEqual(
@@ -262,7 +261,7 @@ class TestHttpHostWhitelisting(TestCaseMixin, TestCase):
         self.middleware(self.request)
 
 
-class TestPathWhitelisting(TestCaseMixin, TestCase):
+class TestPathWhitelisting(BaseTestCase):
     @override_settings(BASIC_AUTH_WHITELISTED_PATHS=["ham/"])
     def test_whitelisted_path_setting_when_setting_set(self):
         self.assertEqual(
@@ -329,7 +328,7 @@ class TestPathWhitelisting(TestCaseMixin, TestCase):
         self.assertFalse(self.middleware._is_path_whitelisted(self.request))
 
 
-class TestResponseClass(TestCaseMixin, TestCase):
+class TestResponseClass(BaseTestCase):
     def test_get_response_class_when_none_set(self):
         self.assertIsInstance(
             self.middleware.get_error_response(self.request), HttpUnauthorizedResponse
