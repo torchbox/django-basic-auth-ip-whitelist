@@ -23,7 +23,7 @@ class HttpUnauthorizedResponse(HttpResponse):
         realm = getattr(settings, "BASIC_AUTH_REALM", "")
         if realm:
             realm = realm.replace('"', '\\"')
-            value += ' realm="{realm}"'.format(realm=realm)
+            value += f' realm="{realm}"'
         return value
 
     def get_response_content(self):
