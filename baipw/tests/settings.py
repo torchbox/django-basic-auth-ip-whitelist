@@ -1,6 +1,5 @@
 from os.path import abspath, dirname, join
 
-import django
 from django.utils.crypto import get_random_string
 
 TESTS_PATH = dirname(abspath(__file__))
@@ -34,6 +33,12 @@ DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "db.sql
 
 ROOT_URLCONF = "baipw.tests.urls"
 
-if django.VERSION < (1, 9):
-    # This is to satisfy the django-admin check command.
-    MIDDLEWARE_CLASSES = []
+MIDDLEWARE = [
+    "baipw.middleware.BasicAuthIPWhitelistMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]

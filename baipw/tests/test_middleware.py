@@ -97,7 +97,7 @@ class TestMiddleware(TestCaseMixin, TestCase):
         self.request.META["REMOTE_ADDR"] = "74.150.52.64"
         self.middleware(self.request)
         self.assertIn("HTTP_AUTHORIZATION", self.request.META)
-        self.assertEqual(self.request.META["HTTP_AUTHORIZATION"], "Basic dGVzdDp0ZXN0")
+        self.assertEqual(self.request.headers["authorization"], "Basic dGVzdDp0ZXN0")
 
     @override_settings(
         BASIC_AUTH_LOGIN="testtest",

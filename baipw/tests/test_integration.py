@@ -1,31 +1,6 @@
-import django
 from django import test
 
-SETTINGS = {}
 
-if django.VERSION < (1, 10):
-    SETTINGS["MIDDLEWARE_CLASSES"] = [
-        "baipw.middleware.BasicAuthIPWhitelistMiddleware",
-        "django.middleware.security.SecurityMiddleware",
-        "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.common.CommonMiddleware",
-        "django.middleware.csrf.CsrfViewMiddleware",
-        "django.contrib.auth.middleware.AuthenticationMiddleware",
-        "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    ]
-else:
-    SETTINGS["MIDDLEWARE"] = [
-        "baipw.middleware.BasicAuthIPWhitelistMiddleware",
-        "django.middleware.security.SecurityMiddleware",
-        "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.common.CommonMiddleware",
-        "django.middleware.csrf.CsrfViewMiddleware",
-        "django.contrib.auth.middleware.AuthenticationMiddleware",
-        "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    ]
-
-
-@test.override_settings(**SETTINGS)
 class TestIntegration(test.TestCase):
     def setUp(self):
         self.client = test.Client()
