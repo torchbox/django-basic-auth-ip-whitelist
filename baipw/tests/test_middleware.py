@@ -19,6 +19,7 @@ class TestMiddleware(BaseTestCase):
         response = self.middleware(self.request)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.headers["X-Robots-Tag"], "noindex")
+        self.assertIn("private", response.headers["Cache-Control"])
 
     @override_settings(
         BASIC_AUTH_LOGIN="testlogin",
@@ -28,6 +29,7 @@ class TestMiddleware(BaseTestCase):
         response = self.middleware(self.request)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.headers["X-Robots-Tag"], "noindex")
+        self.assertIn("private", response.headers["Cache-Control"])
 
     @override_settings(
         BASIC_AUTH_LOGIN="testlogin",
@@ -67,6 +69,7 @@ class TestMiddleware(BaseTestCase):
         self.request._skip_basic_auth_ip_whitelist_middleware_check = True
         response = self.middleware(self.request)
         self.assertEqual(response.status_code, 200)
+        self.assertNotIn("Vary", response.headers)
 
     @override_settings(
         BASIC_AUTH_LOGIN="test",
@@ -74,8 +77,10 @@ class TestMiddleware(BaseTestCase):
     )
     def test_authoritzation_header_consumed_with_correct_credentials(self):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic dGVzdDp0ZXN0"
-        self.middleware(self.request)
+        response = self.middleware(self.request)
         self.assertNotIn("HTTP_AUTHORIZATION", self.request.META)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Authorization", response.headers["Vary"])
 
     @override_settings(
         BASIC_AUTH_LOGIN="testtest",
@@ -83,8 +88,9 @@ class TestMiddleware(BaseTestCase):
     )
     def test_authoritzation_header_consumed_with_incorrect_credentials(self):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic dGVzdDp0ZXN0"
-        self.middleware(self.request)
+        response = self.middleware(self.request)
         self.assertNotIn("HTTP_AUTHORIZATION", self.request.META)
+        self.assertEqual(response.status_code, 401)
 
     @override_settings(
         BASIC_AUTH_LOGIN=None,
@@ -94,9 +100,10 @@ class TestMiddleware(BaseTestCase):
     def test_authoritzation_header_not_consumed_when_auth_not_configured(self):
         self.request.META["HTTP_AUTHORIZATION"] = "Basic dGVzdDp0ZXN0"
         self.request.META["REMOTE_ADDR"] = "74.150.52.64"
-        self.middleware(self.request)
+        response = self.middleware(self.request)
         self.assertIn("HTTP_AUTHORIZATION", self.request.META)
         self.assertEqual(self.request.headers["authorization"], "Basic dGVzdDp0ZXN0")
+        self.assertEqual(response.status_code, 200)
 
     @override_settings(
         BASIC_AUTH_LOGIN="testtest",
@@ -180,11 +187,14 @@ class TestIpWhitelisting(BaseTestCase):
             with mock.patch(
                 "baipw.middleware.BasicAuthIPWhitelistMiddleware._is_ip_whitelisted"
             ) as ip_check_m:
-                self.middleware(self.request)
+                response = self.middleware(self.request)
         # Make sure middleware did not try to evaluate basic auth.
         m.assert_not_called()
         # But it called the IP check.
         ip_check_m.assert_called_once_with(self.request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("private", response.headers["cache-control"])
 
     @override_settings(
         BASIC_AUTH_GET_CLIENT_IP_FUNCTION=("baipw.tests.utils.custom_get_client_ip"),
@@ -257,8 +267,9 @@ class TestHttpHostWhitelisting(BaseTestCase):
     )
     def test_http_host_whitelist_has_precedence_over_basic_auth(self):
         self.request.META["HTTP_HOST"] = "dgg.gg"
-        # It does not raise.
-        self.middleware(self.request)
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Host", response.headers["Vary"])
 
 
 class TestPathWhitelisting(BaseTestCase):
@@ -316,12 +327,9 @@ class TestPathWhitelisting(BaseTestCase):
     )
     def test_path_whitelist_has_precedence_over_basic_auth(self):
         self.request.path = "ham/"
-        try:
-            self.middleware(self.request)
-        except Exception:
-            self.fail(
-                "self.middleware() raised an error unexpectedly for a whitelisted path"
-            )
+        response = self.middleware(self.request)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("Vary", response.headers)
 
     def test_path_whitelist_check_when_settings_empty(self):
         self.request.path = "spam/"
@@ -349,3 +357,4 @@ class TestResponseClass(BaseTestCase):
         response = self.middleware(self.request)
         self.assertIsInstance(response, TestResponse)
         self.assertEqual(response.content, b"Test message. :P")
+        self.assertIn("private", response.headers["Cache-Control"])

@@ -1,6 +1,7 @@
 import ipaddress
 
 from django.conf import settings
+from django.utils.cache import add_never_cache_headers, patch_vary_headers
 from django.utils.module_loading import import_string
 
 from .exceptions import Unauthorized
@@ -13,29 +14,36 @@ class BasicAuthIPWhitelistMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        response = None
-        response = self.process_request(request)
-        response = response or self.get_response(request)
-        return response
-
-    def process_request(self, request):
         # If this attribute is set, skip the check.
         if getattr(request, "_skip_basic_auth_ip_whitelist_middleware_check", False):
             return self.get_response(request)
 
         request._skip_basic_auth_ip_whitelist_middleware_check = True
+
         # Check if http host is whitelisted.
         if self._is_http_host_whitelisted(request):
-            return
+            response = self.get_response(request)
+            patch_vary_headers(response, ["Host"])
+            return response
+
         # Check if path is whitelisted
         if self._is_path_whitelisted(request):
-            return
+            return self.get_response(request)
+
         # Check if IP is whitelisted
         if self._is_ip_whitelisted(request):
-            return
+            response = self.get_response(request)
+            add_never_cache_headers(response)
+            return response
+
         # Fallback to basic auth if configured.
         if self._is_basic_auth_configured():
-            return self._basic_auth_response(request)
+            response = self._basic_auth_response(request) or self.get_response(request)
+            # RFC9111 states requests with an Authorization header shouldn't be cached.
+            # This isn't enforced by all caches (eg Cloudflare), so be explicit.
+            patch_vary_headers(response, ["Authorization"])
+            return response
+
         # Otherwise just deny the access to the website
         return self.get_error_response(request)
 
@@ -57,6 +65,8 @@ class BasicAuthIPWhitelistMiddleware:
 
         # Ensure pages can't be indexed, even if authentication is enabled.
         response.headers["X-Robots-Tag"] = "noindex"
+
+        add_never_cache_headers(response)
 
         return response
 
