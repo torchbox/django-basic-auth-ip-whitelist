@@ -165,6 +165,8 @@ setting to point at the template.
 If you want to specify custom response class, you can do so with this setting.
 Provide the path as a string.
 
+The middleware handles disabling caching and setting the ``X-Robots-Tag`` header.
+
 .. code:: python
 
    BASIC_AUTH_RESPONSE_CLASS = 'yourmodule.response.CustomUnathorisedResponse'
@@ -194,3 +196,13 @@ You can skip the middleware by setting
 
 This may be handy if you have other middleware that you want to have
 co-existing different middleware that restrict access to the website.
+
+Caching
+-------
+
+The middleware tries to configure any external caching securely:
+
+- Basic Auth responses (HTTP 401) are never cached.
+- Requests which pass the IP whitelist are never cached.
+- Authenticated responses are cached. ``Authorization`` is added to the ``Vary`` header.
+- Requests which pass the host whitelist are cached based on their host. ``Host`` is added to the ``Vary`` header.

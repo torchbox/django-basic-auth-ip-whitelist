@@ -1,9 +1,9 @@
-from django.test import RequestFactory, TestCase, override_settings
+from django.test import RequestFactory, SimpleTestCase, override_settings
 
 from baipw.response import DEFAULT_AUTH_TEMPLATE, HttpUnauthorizedResponse
 
 
-class TestHttpUnauthorizedResponse(TestCase):
+class TestHttpUnauthorizedResponse(SimpleTestCase):
     def setUp(self):
         self.request = RequestFactory().get("/")
 
@@ -36,11 +36,3 @@ class TestHttpUnauthorizedResponse(TestCase):
             response.get_response_content().strip(), "This is a test template."
         )
         self.assertEqual(response["Content-Type"], "text/html")
-
-    def test_never_cache_headers_set(self):
-        response = HttpUnauthorizedResponse(request=self.request)
-        cache_control_args = [v.strip() for v in response["cache-control"].split(",")]
-        self.assertEqual(
-            cache_control_args,
-            ["max-age=0", "no-cache", "no-store", "must-revalidate", "private"],
-        )

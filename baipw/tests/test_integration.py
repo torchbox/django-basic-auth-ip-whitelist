@@ -1,7 +1,7 @@
 from django import test
 
 
-class TestIntegration(test.TestCase):
+class TestIntegration(test.SimpleTestCase):
     def setUp(self):
         self.client = test.Client()
 

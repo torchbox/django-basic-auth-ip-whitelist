@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.utils.cache import add_never_cache_headers
 
 DEFAULT_AUTH_TEMPLATE = (
     "<title>Authentication Required</title><h1>Authentication required</h1>"
@@ -16,7 +15,6 @@ class HttpUnauthorizedResponse(HttpResponse):
         kwargs.setdefault("status", 401)
         super().__init__(self.get_response_content(), *args, **kwargs)
         self["WWW-Authenticate"] = self.get_www_authenticate_value()
-        add_never_cache_headers(self)
 
     def get_www_authenticate_value(self):
         value = "Basic"
