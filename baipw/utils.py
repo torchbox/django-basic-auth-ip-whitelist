@@ -38,6 +38,8 @@ def authorize(request, configured_username, configured_password):
         # request.headers is a cached property, so needs invalidating
         del request.headers
 
+    configured_credentials = f"{configured_username}:{configured_password}"
+
     for authentication in authentication_header.split(","):
         authentication_tuple = authentication.split(" ", 1)
         if len(authentication_tuple) != 2:
@@ -47,10 +49,7 @@ def authorize(request, configured_username, configured_password):
         if "basic" != auth_method.lower():
             raise Unauthorized("Invalid Authorization header.")
         auth = base64.b64decode(auth.strip()).decode("utf-8")
-        username, password = auth.split(":", 1)
-        username_valid = constant_time_compare(username, configured_username)
-        password_valid = constant_time_compare(password, configured_password)
-        if username_valid and password_valid:
+        if constant_time_compare(auth, configured_credentials):
             return True
 
     raise Unauthorized("Basic authentication credentials are invalid.")
