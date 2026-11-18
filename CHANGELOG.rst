@@ -1,3 +1,9 @@
+0.9.0 - 18th November 2026
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* Configure external caches by sending `Cache-Control` and `Vary` headers.
+* Drop support for older versions of Python / Django
+
 0.8.0 - 10th March 2025
 ~~~~~~~~~~~~~~~~~~~~~~~
 
